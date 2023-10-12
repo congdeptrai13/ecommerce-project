@@ -4,11 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+
     <title>Ecommerce Dashboard &mdash; Stisla</title>
 
     <!-- General CSS Files -->
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/bootstrap/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/assets/modules/fontawesome/css/all.min.css') }}">
+
 
     <!-- CSS Libraries -->
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/jqvmap/dist/jqvmap.min.css') }}">
@@ -16,12 +18,14 @@
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css') }}">
     <link rel="stylesheet"
         href="{{ asset('backend/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css') }}">
-
+    <link rel="stylesheet" href="{{ asset('backend/assets/modules/fontawesome/css/all.min.css') }}">
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('backend/assets/css/style.css') }}">
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="{{ asset('backend/assets/css/components.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <!-- Start GA -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -86,9 +90,14 @@
     <!-- Page Specific JS File -->
     <script src="{{ asset('backend/assets/js/page/index-0.js') }}"></script>
 
+    <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Template JS File -->
     <script src="{{ asset('backend/assets/js/scripts.js') }}"></script>
     <script src="{{ asset('backend/assets/js/custom.js') }}"></script>
+
     <script>
         @if ($errors->any())
             @foreach ($errors->all() as $error)
@@ -96,6 +105,65 @@
             @endforeach
         @endif
     </script>
+
+    {{-- Dynamic delete alert --}}
+    <script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+
+            $('body').on('click', '.delete-item', function(event) {
+                event.preventDefault();
+
+                let deleteUrl = $(this).attr('href');
+
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: 'DELETE',
+                            url: deleteUrl,
+                            success: function(data) {
+                                if (data.status === 'success') {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        data.message
+                                    )
+                                    window.location.reload();
+                                } else if (data.status === 'error') {
+                                    Swal.fire(
+                                        'Cant Delete!',
+                                        data.message
+                                    )
+                                    //window.location.reload();
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.log(xhr);
+                                console.log(error);
+                            }
+                        })
+
+                    }
+                })
+            })
+        })
+    </script>
+
+    @stack('scripts')
+
 </body>
 
 </html>
