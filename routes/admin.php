@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Backend\AdminController;
+use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\SliderController;
+use App\Http\Controllers\Backend\SubCategoryController;
 use Illuminate\Support\Facades\Route;
 
 //admin route
@@ -13,4 +15,12 @@ Route::post('password/update', [AdminController::class, 'updatePassword'])->name
 
 
 // slider route
-Route::resource('slider',SliderController::class);
+Route::resource('slider', SliderController::class);
+
+//category route
+Route::put('change-status', [CategoryController::class, 'changeStatus'])->name('category.change-status');
+Route::resource('category', CategoryController::class);
+
+//sub-category route
+// Route::put('change-status', [SubCategoryController::class, 'changeStatus'])->name('category.change-status');
+Route::resource('sub-category', SubCategoryController::class);

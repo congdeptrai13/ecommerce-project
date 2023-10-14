@@ -19,6 +19,7 @@
     <link rel="stylesheet"
         href="{{ asset('backend/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/fontawesome/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/css/bootstrap-iconpicker.min.css') }}">
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('backend/assets/css/style.css') }}">
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
@@ -79,6 +80,9 @@
     <script src="{{ asset('backend/assets/modules/moment.min.js') }}"></script>
     <script src="{{ asset('backend/assets/js/stisla.js') }}"></script>
 
+    <script src="{{ asset('backend/assets/css/bootstrap-iconpicker.min.css') }}"></script>
+
+    <script src="{{ asset('backend/assets/js/bootstrap-iconpicker.bundle.min.js') }}"></script>
     <!-- JS Libraies -->
     <script src="{{ asset('backend/assets/modules/simple-weather/jquery.simpleWeather.min.js') }}"></script>
     <script src="{{ asset('backend/assets/modules/chart.min.js') }}"></script>
@@ -93,7 +97,6 @@
     <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <!-- Template JS File -->
     <script src="{{ asset('backend/assets/js/scripts.js') }}"></script>
     <script src="{{ asset('backend/assets/js/custom.js') }}"></script>
