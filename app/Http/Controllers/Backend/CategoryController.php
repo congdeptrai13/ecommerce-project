@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\DataTables\CategoryDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Str;
 use Yoeunes\Toastr\Facades\Toastr;
@@ -97,6 +98,13 @@ class CategoryController extends Controller
     {
         //
         $category = Category::find($id);
+        $subCategory = SubCategory::where('category_id', $category->id)->count();
+        if ($subCategory > 0) {
+            return response([
+                'status' => 'error',
+                'message' => 'this category contains sub-category. Pls delete sub category first'
+            ]);
+        }
         $category->delete();
         Toastr('Deleted Successfully', 'success');
         return response([
@@ -109,6 +117,7 @@ class CategoryController extends Controller
     {
         $category = Category::find($request->id);
         $category->status = $request->status === 'true' ? 1 : 0;
+
         $category->save();
         return response([
             'message' => 'Status has been updated'
