@@ -6,8 +6,11 @@ use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\ChildCategoryController;
 use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\Backend\ProductImageGalleryController;
+use App\Http\Controllers\Backend\ProductVariantController;
 use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Backend\SubCategoryController;
+use App\Http\Controllers\Backend\VariantItemController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
@@ -48,3 +51,12 @@ Route::resource('vendor-profile', AdminVendorProfileController::class);
 Route::get('get-subcategories', [ProductController::class, 'getSubCategories'])->name('product.get-subcategories');
 Route::get('get-childcategories', [ProductController::class, 'getChildCategories'])->name('product.get-childcategories');
 Route::resource('products', ProductController::class);
+Route::resource('product-images-gallery', ProductImageGalleryController::class);
+
+//Product Variant route
+Route::put('product-variant/change-status', [ProductVariantController::class, 'changeStatus'])->name('product-variant.change-status');
+
+Route::resource('product-variant', ProductVariantController::class);
+
+//variant-items route
+Route::get('product-variant-item/{productId}/{variantId}', [VariantItemController::class, 'index'])->name('product-variant-item.index');

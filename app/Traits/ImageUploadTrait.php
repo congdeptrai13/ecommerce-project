@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Illuminate\Http\UploadedFile;
 use Illuminate\Http\Request;
 
 trait ImageUploadTrait
@@ -14,6 +15,23 @@ trait ImageUploadTrait
             $nameImage = 'media_' . uniqid() . '.' . $ext;
             $image->move(public_path($path), $nameImage);
             return $path . "/" . $nameImage;
+        }
+    }
+
+    public function uploadMultiImage(Request $request, $inputName, $path)
+    {
+        $multiImagePath = [];
+        if ($request->hasFile($inputName)) {
+            $images = $request->{$inputName};
+            foreach ($images as $image) {
+                $ext = $image->getClientOriginalextension();
+                $nameImage = 'media_' . uniqid() . '.' . $ext;
+                $image->move(public_path($path), $nameImage);
+                $multiImagePath[] = $path . "/" . $nameImage;
+            }
+            return $multiImagePath;
+
+
             // $user->image = $path;
         }
     }
