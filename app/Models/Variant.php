@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Variant extends Model
 {
     use HasFactory;
+    public function variantItem()
+    {
+        return $this->hasMany(VariantItem::class, 'product_variant_id', 'id');
+    }
 }

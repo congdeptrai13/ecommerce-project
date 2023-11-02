@@ -22,7 +22,40 @@ class VariantItemDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', 'variantitem.action')
+            ->addColumn('action', function ($query) {
+                return "
+<a href='" . route('admin.product-variant-item.edit', $query->id) . "' class='btn btn-primary'><i class='fas fa-edit'></i></a>
+<a href='" . route('admin.product-variant-item.destroy', $query->id) . "' class='btn btn-danger delete-item'><i class='fas fa-trash'></i></a>
+";
+            })
+            ->addColumn('status', function ($query) {
+                if ($query->status === 1) {
+                    return '
+                <label class="custom-switch mt-2">
+                <input type="checkbox" checked data-id="' . $query->id . '" name="custom-switch-checkbox" class="custom-switch-input change-status">
+                <span class="custom-switch-indicator"></span>
+              </label>
+              ';
+                } else {
+                    return '
+                <label class="custom-switch mt-2">
+                <input type="checkbox" data-id="' . $query->id . '"  name="custom-switch-checkbox" class="custom-switch-input change-status">
+                <span class="custom-switch-indicator"></span>
+              </label>
+              ';
+                }
+            })
+            ->addColumn('Variant Name', function ($query) {
+                return $query->variant->name;
+            })
+            ->addColumn("is_default", function ($query) {
+                if ($query->is_default === 1) {
+                    return "<i class='badge badge-info'>Default</i>";
+                } else {
+                    return "<i class='badge badge-danger'>No</i>";
+                }
+            })
+            ->rawColumns(['action', 'status', 'Variant Name', 'is_default'])
             ->setRowId('id');
     }
 
@@ -31,7 +64,7 @@ class VariantItemDataTable extends DataTable
      */
     public function query(VariantItem $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->where('product_variant_id', request()->variantId)->newQuery();
     }
 
     /**
@@ -40,20 +73,20 @@ class VariantItemDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('variantitem-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    //->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->selectStyleSingle()
-                    ->buttons([
-                        Button::make('excel'),
-                        Button::make('csv'),
-                        Button::make('pdf'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    ]);
+            ->setTableId('variantitem-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            //->dom('Bfrtip')
+            ->orderBy(1)
+            ->selectStyleSingle()
+            ->buttons([
+                Button::make('excel'),
+                Button::make('csv'),
+                Button::make('pdf'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            ]);
     }
 
     /**
@@ -62,15 +95,18 @@ class VariantItemDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
+
             Column::make('id'),
-            Column::make('add your columns'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
+            Column::make('name'),
+            Column::make('Variant Name'),
+            Column::make('price'),
+            Column::make('is_default'),
+            Column::make('status'),
+            Column::computed('action')
+                ->exportable(false)
+                ->printable(false)
+                ->width(200)
+                ->addClass('text-center'),
         ];
     }
 

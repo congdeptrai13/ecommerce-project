@@ -12,43 +12,48 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Create Variant Item</h4>
+                            <h4>Edit Variant Item</h4>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('admin.product-variant-item.store') }}" method="post">
+                            <form action="{{ route('admin.product-variant-item.update', $variantItem->id) }}" method="POST">
                                 @csrf
-                                <input type="hidden" name="productId" value="{{ $product->id }}">
-                                <input type="hidden" name="variantId" value="{{ $variant->id }}">
+                                @method('PUT')
                                 <div class="form-group">
                                     <label>Variant Name</label>
                                     <input type="text" class="form-control" name="variant_name"
-                                        value="{{ $product->name }}" disabled>
+                                        value="{{ $variantItem->variant->name }}" disabled>
                                 </div>
                                 <div class="form-group">
                                     <label>Item Name</label>
-                                    <input type="text" class="form-control" name="name">
+                                    <input type="text" class="form-control" name="name"
+                                        value="{{ $variantItem->name }}">
                                 </div>
                                 <div class="form-group">
                                     <label>Price <code>(Set 0 for make it free)</code></label>
-                                    <input type="text" class="form-control" name="price">
+                                    <input type="text" class="form-control" name="price"
+                                        value="{{ $variantItem->price }}">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="inputState">Is Default</label>
                                     <select id="inputState" class="form-control" name="is_default">
-                                        <option selected="" value="1">Yes</option>
-                                        <option value="0">No</option>
+                                        <option {{ $variantItem->is_default === 1 ? 'selected' : '' }} selected=""
+                                            value="1">Yes</option>
+                                        <option {{ $variantItem->is_default === 0 ? 'selected' : '' }} value="0">No
+                                        </option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputState">Status</label>
                                     <select id="inputState" class="form-control" name="status">
-                                        <option selected="" value="1">Active</option>
-                                        <option value="0">Inactive</option>
+                                        <option {{ $variantItem->status === 1 ? 'selected' : '' }} selected=""
+                                            value="1">Active</option>
+                                        <option {{ $variantItem->status === 0 ? 'selected' : '' }} value="0">
+                                            Inactive</option>
                                     </select>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary">Create</button>
+                                <button type="submit" class="btn btn-primary">Update</button>
                             </form>
                         </div>
                     </div>

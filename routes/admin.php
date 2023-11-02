@@ -50,6 +50,8 @@ Route::resource('vendor-profile', AdminVendorProfileController::class);
 //Product route
 Route::get('get-subcategories', [ProductController::class, 'getSubCategories'])->name('product.get-subcategories');
 Route::get('get-childcategories', [ProductController::class, 'getChildCategories'])->name('product.get-childcategories');
+Route::put('product/change-status', [ProductController::class, 'changeStatus'])->name('product.change-status');
+
 Route::resource('products', ProductController::class);
 Route::resource('product-images-gallery', ProductImageGalleryController::class);
 
@@ -60,3 +62,11 @@ Route::resource('product-variant', ProductVariantController::class);
 
 //variant-items route
 Route::get('product-variant-item/{productId}/{variantId}', [VariantItemController::class, 'index'])->name('product-variant-item.index');
+Route::get('product-variant-item/create/{productId}/{variantId}', [VariantItemController::class, 'create'])->name('product-variant-item.create');
+
+Route::get('product-variant-item-edit/{variantItemId}', [VariantItemController::class, 'edit'])->name('product-variant-item.edit');
+Route::delete('product-variant-item-destroy/{variantItemId}', [VariantItemController::class, 'destroy'])->name('product-variant-item.destroy');
+
+Route::post('product-variant-item/create', [VariantItemController::class, 'store'])->name('product-variant-item.store');
+Route::put('product-variant-item-update/{variantItemId}', [VariantItemController::class, 'update'])->name('product-variant-item.update');
+Route::put('product-variant-item-change-status', [VariantItemController::class, 'changeStatus'])->name('product-variant-item.change-status');

@@ -19,7 +19,7 @@
                         <div class="card-header">
                             <h4>Product: {{ $product->name }}</h4>
                             <div class="card-header-action">
-                                <a href="{{ route('admin.product-variant.create', ['product' => $product->id]) }}"
+                                <a href="{{ route('admin.product-variant-item.create', ['productId' => $product->id, 'variantId' => $variant->id]) }}"
                                     class="btn btn-primary"><i class="fas fa-plus-circle"></i> Create New</a>
                             </div>
                         </div>
@@ -40,7 +40,7 @@
                     let id = $(this).data('id');
 
                     $.ajax({
-                        url: "{{ route('admin.product-variant.change-status') }}",
+                        url: "{{ route('admin.product-variant-item.change-status') }}",
                         method: 'PUT',
                         data: {
                             status: isChecked,
