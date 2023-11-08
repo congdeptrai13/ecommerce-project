@@ -126,7 +126,7 @@
 
                                 <div class="form-group">
                                     <label>Product Type</label>
-                                    <select id="inputState" class="form-control" name="is_top">
+                                    <select id="inputState" class="form-control" name="product_type">
                                         <option selected="" value="">Select</option>
                                         <option value="new_arrival">New Arrival</option>
                                         <option value="featured">Featured</option>

@@ -3,7 +3,9 @@
 namespace App\DataTables;
 
 use App\Models\Product;
+use App\Models\VendorProduct;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
@@ -12,7 +14,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class ProductDataTable extends DataTable
+class VendorProductDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -24,18 +26,18 @@ class ProductDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addColumn('action', function ($query) {
                 $other_btn = '<div class="dropleft d-inline">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-cog"></i>
-                </button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item has-icon" href="' . route('admin.product-images-gallery.index', ['product' => $query->id]) . '"><i class="far fa-heart"></i> Image Gallery</a>
-                  <a class="dropdown-item has-icon" href="' . route('admin.product-variant.index', ['product' => $query->id]) . '"><i class="far fa-file"></i> Variant</a>
-                </div>
-              </div>';
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-cog"></i>
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item has-icon" href="' . route('admin.product-images-gallery.index', ['product' => $query->id]) . '"><i class="far fa-heart"></i> Image Gallery</a>
+              <a class="dropdown-item has-icon" href="' . route('admin.product-variant.index', ['product' => $query->id]) . '"><i class="far fa-file"></i> Variant</a>
+            </div>
+          </div>';
                 return "
-    <a href='" . route('admin.products.edit', $query->id) . "' class='btn btn-primary'><i class='fas fa-edit'></i></a>
-    <a href='" . route('admin.products.destroy', $query->id) . "' class='btn btn-danger delete-item'><i class='fas fa-trash'></i></a>
-    " . $other_btn;
+<a href='" . route('vendor.products.edit', $query->id) . "' class='btn btn-primary'><i class='fas fa-edit'></i></a>
+<a href='" . route('admin.products.destroy', $query->id) . "' class='btn btn-danger delete-item'><i class='fas fa-trash'></i></a>
+" . $other_btn;
             })
             ->addColumn('image', function ($query) {
                 return "<img width='70px' src='" . asset($query->thumb_image) . "'/>";
@@ -43,33 +45,37 @@ class ProductDataTable extends DataTable
             ->addColumn("type", function ($query) {
                 switch ($query->product_type) {
                     case "new_arrival":
-                        return "<i class='badge badge-info'>New Arrival</i>";
+                        return "<i class='badge bg-info'>New Arrival</i>";
                     case "featured":
-                        return "<i class='badge badge-info'> Featured</i>";
+                        return "<i class='badge bg-info'> Featured</i>";
 
                     case "top_product":
-                        return "<i class='badge badge-info'> Top Product</i>";
+                        return "<i class='badge bg-info'> Top Product</i>";
                     case "best_product":
-                        return "<i class='badge badge-info'>Best Product</i>";
+                        return "<i class='badge bg-info'>Best Product</i>";
                     default:
-                        return "<i class='badge badge-dark'>None</i>";
+                        return "<i class='badge bg-dark'>None</i>";
                 }
             })
             ->addColumn('status', function ($query) {
                 if ($query->status === 1) {
+                    //             return '
+                    //     <label class="custom-switch mt-2">
+                    //     <input type="checkbox" checked data-id="' . $query->id . '" name="custom-switch-checkbox" class="custom-switch-input change-status">
+                    //     <span class="custom-switch-indicator"></span>
+                    //   </label>
+                    //   ';
                     return '
-                <label class="custom-switch mt-2">
-                <input type="checkbox" checked data-id="' . $query->id . '" name="custom-switch-checkbox" class="custom-switch-input change-status">
-                <span class="custom-switch-indicator"></span>
-              </label>
-              ';
+                    <div class="form-check form-switch">
+                    <input class="form-check-input change-status" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked data-id="' . $query->id . '" name="custom-switch-checkbox">
+                  </div>
+                    ';
                 } else {
                     return '
-                <label class="custom-switch mt-2">
-                <input type="checkbox" data-id="' . $query->id . '"  name="custom-switch-checkbox" class="custom-switch-input change-status">
-                <span class="custom-switch-indicator"></span>
-              </label>
-              ';
+                    <div class="form-check form-switch">
+                    <input class="form-check-input change-status" type="checkbox" role="switch" id="flexSwitchCheckChecked" data-id="' . $query->id . '" name="custom-switch-checkbox">
+                  </div>
+                     ';
                 }
             })
             ->rawColumns(['action', 'status', 'image', 'type'])
@@ -81,7 +87,7 @@ class ProductDataTable extends DataTable
      */
     public function query(Product $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->where("vendor_id", Auth::user()->vendor->id)->newQuery();
     }
 
     /**
@@ -90,7 +96,7 @@ class ProductDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('product-table')
+            ->setTableId('vendorproduct-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             //->dom('Bfrtip')
@@ -112,7 +118,6 @@ class ProductDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-
             Column::make('id'),
             Column::make('image'),
             Column::make('name'),
@@ -132,6 +137,6 @@ class ProductDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Product_' . date('YmdHis');
+        return 'VendorProduct_' . date('YmdHis');
     }
 }

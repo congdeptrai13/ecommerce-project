@@ -13,7 +13,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Create Product</h4>
+                            <h4>Edit Product</h4>
                         </div>
                         <div class="card-body">
                             <form action="{{ route('admin.products.update', $product->id) }}" method="POST"
@@ -146,7 +146,7 @@
 
                                 <div class="form-group">
                                     <label>Product Type</label>
-                                    <select id="inputState" class="form-control" name="is_top">
+                                    <select id="inputState" class="form-control" name="product_type">
                                         <option selected="" value="">Select</option>
                                         <option {{ $product->product_type === 'new_arrival' ? 'selected' : '' }}
                                             value="new_arrival">New Arrival</option>

@@ -29,6 +29,11 @@
                                     <input type="file" class="form-control" name="banner">
                                 </div>
                                 <div class="form-group">
+                                    <label>Shop Name</label>
+                                    <input type="text" class="form-control" name="shop_name"
+                                        value="{{ $vendor->shop_name }}">
+                                </div>
+                                <div class="form-group">
                                     <label>Phone</label>
                                     <input type="text" class="form-control" name="phone" value="{{ $vendor->phone }}">
                                 </div>
