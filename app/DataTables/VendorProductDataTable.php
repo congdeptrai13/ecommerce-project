@@ -25,15 +25,18 @@ class VendorProductDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function ($query) {
-                $other_btn = '<div class="dropleft d-inline">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-cog"></i>
-            </button>
-            <div class="dropdown-menu">
-              <a class="dropdown-item has-icon" href="' . route('admin.product-images-gallery.index', ['product' => $query->id]) . '"><i class="far fa-heart"></i> Image Gallery</a>
-              <a class="dropdown-item has-icon" href="' . route('admin.product-variant.index', ['product' => $query->id]) . '"><i class="far fa-file"></i> Variant</a>
-            </div>
-          </div>';
+                $other_btn = '
+                <!-- Default dropstart button -->
+                <div class="btn-group dropstart">
+                  <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="fas fa-cog"></i>
+                  </button>
+                  <ul class="dropdown-menu">
+                  <a class="dropdown-item has-icon" href="' . route('vendor.product-images-gallery.index', ['product' => $query->id]) . '"><i class="far fa-heart"></i> Image Gallery</a>
+                  <a class="dropdown-item has-icon" href="' . route('vendor.product-variant.index', ['product' => $query->id]) . '"><i class="far fa-file"></i> Variant</a>
+                  </ul>
+                </div>
+        ';
                 return "
 <a href='" . route('vendor.products.edit', $query->id) . "' class='btn btn-primary'><i class='fas fa-edit'></i></a>
 <a href='" . route('admin.products.destroy', $query->id) . "' class='btn btn-danger delete-item'><i class='fas fa-trash'></i></a>
