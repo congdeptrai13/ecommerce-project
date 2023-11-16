@@ -39,7 +39,7 @@ class VendorProductDataTable extends DataTable
         ';
                 return "
 <a href='" . route('vendor.products.edit', $query->id) . "' class='btn btn-primary'><i class='fas fa-edit'></i></a>
-<a href='" . route('admin.products.destroy', $query->id) . "' class='btn btn-danger delete-item'><i class='fas fa-trash'></i></a>
+<a href='" . route('vendor.products.destroy', $query->id) . "' class='btn btn-danger delete-item'><i class='fas fa-trash'></i></a>
 " . $other_btn;
             })
             ->addColumn('image', function ($query) {
@@ -81,7 +81,14 @@ class VendorProductDataTable extends DataTable
                      ';
                 }
             })
-            ->rawColumns(['action', 'status', 'image', 'type'])
+            ->addColumn("approved", function ($query) {
+                if ($query->is_approved === 1) {
+                    return "<i class='badge bg-success'>Approved</i>";
+                } else {
+                    return "<i class='badge bg-warning'> Pending</i>";
+                }
+            })
+            ->rawColumns(['action', 'status', 'image', 'type','approved'])
             ->setRowId('id');
     }
 
@@ -125,6 +132,7 @@ class VendorProductDataTable extends DataTable
             Column::make('image'),
             Column::make('name'),
             Column::make('price'),
+            Column::make('approved'),
             Column::make('type'),
             Column::make('status'),
             Column::computed('action')

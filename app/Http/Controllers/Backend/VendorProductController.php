@@ -8,7 +8,9 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\ChildCategory;
 use App\Models\Product;
+use App\Models\ProductImageGallery;
 use App\Models\SubCategory;
+use App\Models\Variant;
 use App\Traits\ImageUploadTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -166,6 +168,36 @@ class VendorProductController extends Controller
     public function destroy(string $id)
     {
         //
+        $product = Product::findOrFail($id);
+        if ($product->vendor_id !==  Auth::id()) {
+            abort(404);
+        }
+
+        //xóa ảnh thumbnail image
+        $this->deleteImage($product->thumb_image);
+
+        // xóa ảnh từ image gallery
+        $productImageGallery = ProductImageGallery::where("product_id", $product->id)->get();
+        if (count($productImageGallery) > 0) {
+            foreach ($productImageGallery as $imageGallery) {
+                $this->deleteImage($imageGallery->image);
+                $imageGallery->delete();
+            }
+        }
+
+
+        // xóa các product variant
+        $variants = Variant::where('product_id', $product->id)->get();
+        foreach ($variants as $variant) {
+            $variant->variantItem()->delete();
+            $variant->delete();
+        }
+        $product->delete();
+
+        return response([
+            'status' => "success",
+            'message' => 'Deleted Successfully'
+        ]);
     }
 
     public function getSubCategories(Request $request)
@@ -178,5 +210,15 @@ class VendorProductController extends Controller
     {
         $childCategory = ChildCategory::where('sub_category_id', $request->id)->get();
         return $childCategory;
+    }
+
+    public function changeStatus(Request $request)
+    {
+        $product = Product::findOrFail($request->id);
+        $product->status = $request->status === 'true' ? 1 : 0;
+        $product->save();
+        return response([
+            'message' => 'Status has been updated'
+        ]);
     }
 }

@@ -11,8 +11,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
+                        <div class="mb-3">
+                            <a href="{{ route('admin.products.index') }}" class="btn btn-primary">back</a>
+                        </div>
                         <div class="card-header">
-                            <h4>Product: {{ $product->name }}</h4>
+                            <h4>Product Variant: {{ $product->name }}</h4>
                             <div class="card-header-action">
                                 <a href="{{ route('admin.product-variant.create', ['product' => $product->id]) }}"
                                     class="btn btn-primary"><i class="fas fa-plus-circle"></i> Create New</a>
@@ -33,7 +36,7 @@
                 $('body').on('click', '.change-status', function() {
                     let isChecked = $(this).is(':checked');
                     let id = $(this).data('id');
-                    
+
                     $.ajax({
                         url: "{{ route('admin.product-variant.change-status') }}",
                         method: 'PUT',

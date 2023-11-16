@@ -12,4 +12,9 @@ class Variant extends Model
     {
         return $this->hasMany(VariantItem::class, 'product_variant_id', 'id');
     }
+
+    function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
+    }
 }

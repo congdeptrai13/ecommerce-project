@@ -9450,7 +9450,8 @@ a:not([href]):not([class]):hover {
 }
 
 .create_button {
-    text-align: right;
+    display: flex;
+    justify-content: space-between;
     margin-bottom: 10px;
 }
 

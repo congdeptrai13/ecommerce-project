@@ -2,8 +2,8 @@
 
 @section('content')
     <!--=============================
-                                                                                                                                                                            DASHBOARD START
-                                                                                                                                                                          ==============================-->
+                                                                                                                                                                                    DASHBOARD START
+                                                                                                                                                                                  ==============================-->
     <section id="wsus__dashboard">
         <div class="container-fluid">
             @include('vendor.layouts.sidebar')
@@ -30,5 +30,28 @@
     </section>
     @push('scripts')
         {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+        <script>
+            $(document).ready(function() {
+                $('body').on('click', '.change-status', function() {
+                    let isChecked = $(this).is(':checked');
+                    let id = $(this).data('id');
+
+                    $.ajax({
+                        url: "{{ route('vendor.products.change-status') }}",
+                        method: 'PUT',
+                        data: {
+                            status: isChecked,
+                            id: id
+                        },
+                        success: function(data) {
+                            toastr.success(data.message);
+                        },
+                        error: function(xhr, status, error) {
+                            console.log(error)
+                        }
+                    })
+                })
+            })
+        </script>
     @endpush
 @endsection

@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Variant;
 use App\Models\VariantItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class VendorProductVariantController extends Controller
 {
@@ -18,6 +19,10 @@ class VendorProductVariantController extends Controller
     {
         //
         $product = Product::find($request->product);
+        // check product vendor
+        if ($product->vendor_id !== Auth::user()->vendor->id) {
+            abort(404);
+        }
         return $dataTable->render("vendor.products.product-variant.index", compact('product'));
     }
 
@@ -68,7 +73,9 @@ class VendorProductVariantController extends Controller
         //
         $variant = Variant::find($id);
         $product = Product::find($variant->product_id);
-
+        if ($product->vendor_id !== Auth::user()->vendor->id) {
+            abort(404);
+        }
         return view('vendor.products.product-variant.edit', compact('variant', 'product'));
     }
 
@@ -84,6 +91,9 @@ class VendorProductVariantController extends Controller
         ]);
 
         $variant = Variant::find($id);
+        if ($variant->product->vendor_id !== Auth::user()->vendor->id) {
+            abort(404);
+        }
         $variant->name = $request->name;
         $variant->status = $request->status;
         $variant->save();
@@ -97,6 +107,9 @@ class VendorProductVariantController extends Controller
     public function destroy(string $id)
     {
         $variant = Variant::find($id);
+        if ($variant->product->vendor_id !== Auth::user()->vendor->id) {
+            abort(404);
+        }
         $VariantItemCheck = VariantItem::where('product_variant_id', $id)->count();
         if ($VariantItemCheck > 0) {
             return response([
