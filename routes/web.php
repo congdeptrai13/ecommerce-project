@@ -3,6 +3,7 @@
 use App\Http\Controllers\Backend\AdminController;
 use App\Http\Controllers\Backend\VendorController;
 use App\Http\Controllers\Frontend\FlashSaleController;
+use App\Http\Controllers\Frontend\FrontendProductController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\UserDashboardController;
 use App\Http\Controllers\Frontend\UserProfileController;
@@ -48,5 +49,7 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
 
 
 // flashsale route
-
 Route::get('flash-sale', [FlashSaleController::class, "index"])->name('flash-sale');
+
+// frontend product route
+Route::get('product-detail/{slug}', [FrontendProductController::class, "index"])->name('product-detail');

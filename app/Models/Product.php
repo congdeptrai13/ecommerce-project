@@ -11,7 +11,7 @@ class Product extends Model
 
     public function variant()
     {
-        return $this->hasMany(Variant::class, 'product_id', 'id');
+        return $this->hasMany(Variant::class);
     }
 
     public function vendor()
@@ -27,5 +27,10 @@ class Product extends Model
     public function productImageGallery()
     {
         return $this->hasMany(ProductImageGallery::class);
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
     }
 }
