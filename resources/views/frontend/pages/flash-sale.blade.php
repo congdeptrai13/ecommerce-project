@@ -1,8 +1,8 @@
 @extends('frontend.layouts.master')
 @section('content')
     <!--============================
-                                                                    BREADCRUMB START
-                                                                ==============================-->
+                                                                            BREADCRUMB START
+                                                                        ==============================-->
     <section id="wsus__breadcrumb">
         <div class="wsus_breadcrumb_overlay">
             <div class="container">
@@ -19,13 +19,13 @@
         </div>
     </section>
     <!--============================
-                                                                    BREADCRUMB END
-                                                                ==============================-->
+                                                                            BREADCRUMB END
+                                                                        ==============================-->
 
 
     <!--============================
-                                                                    DAILY DEALS DETAILS START
-                                                                ==============================-->
+                                                                            DAILY DEALS DETAILS START
+                                                                        ==============================-->
     <section id="wsus__daily_deals">
         <div class="container">
             <div class="wsus__offer_details_area">
@@ -59,7 +59,7 @@
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="wsus__section_header rounded-0">
-                            <h3>flash sell</h3>
+                            <h3>flash sale</h3>
                             <div class="wsus__offer_countdown">
                                 <span class="end_text">ends time :</span>
                                 <div class="simply-countdown simply-countdown-one"></div>
@@ -112,11 +112,11 @@
                                     <a class="wsus__pro_name"
                                         href="{{ route('product-detail', $product->slug) }}">{{ $product->name }}</a>
                                     @if (checkDiscount($product))
-                                        <p class="wsus__price">${{ $product->offer_price }}
+                                        <p class="wsus__price">{{ $settings->currency_icon }}{{ $product->offer_price }}
                                             <del>${{ $product->price }}</del>
                                         </p>
                                     @else
-                                        <p class="wsus__price">${{ $product->price }}</p>
+                                        <p class="wsus__price">{{ $settings->currency_icon }}{{ $product->price }}</p>
                                     @endif
                                     <a class="add_cart" href="#">add to cart</a>
                                 </div>
@@ -133,8 +133,8 @@
         </div>
     </section>
     <!--============================
-                                                                    DAILY DEALS DETAILS END
-                                                                ==============================-->
+                                                                            DAILY DEALS DETAILS END
+                                                                        ==============================-->
 @endsection
 @push('scripts')
     <script>

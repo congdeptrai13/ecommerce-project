@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\ProductImageGalleryController;
 use App\Http\Controllers\Backend\ProductVariantController;
 use App\Http\Controllers\Backend\SellerProductController;
+use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Backend\VariantItemController;
@@ -86,3 +87,8 @@ Route::put('flash-sale/change-show-at-home', [FlashSaleController::class, 'Chang
 
 Route::put('flash-sale/change-status', [FlashSaleController::class, 'ChangeStatus'])->name('flash-sale.change-status');
 Route::delete('flash-sale/{id}', [FlashSaleController::class, 'destroy'])->name('flash-sale.destroy');
+
+
+//setting routes
+Route::get('setting', [SettingController::class, 'index'])->name('settings.index');
+Route::put('setting', [SettingController::class, 'Update'])->name('settings.update');

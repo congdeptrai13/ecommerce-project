@@ -79,7 +79,9 @@
                             href="{{ route('admin.flash-sale.index') }}">Flash Sale</a></li>
                 </ul>
             </li>
-        </ul>
+            <li><a class="nav-link" href="{{ route('admin.settings.index') }}"><i class="far fa-square"></i>
+                    <span>General Setting</span></a></li>
 
+        </ul>
     </aside>
 </div>
