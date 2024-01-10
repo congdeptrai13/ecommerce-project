@@ -77,6 +77,8 @@
                             href="{{ route('admin.vendor-profile.index') }}">Vendor</a></li>
                     <li class="{{ setActive(['admin.flash-sale.*']) }}"><a class="nav-link"
                             href="{{ route('admin.flash-sale.index') }}">Flash Sale</a></li>
+                    <li class="{{ setActive(['admin.coupons.*']) }}"><a class="nav-link"
+                            href="{{ route('admin.coupons.index') }}">Coupon</a></li>
                 </ul>
             </li>
             <li><a class="nav-link" href="{{ route('admin.settings.index') }}"><i class="far fa-square"></i>
