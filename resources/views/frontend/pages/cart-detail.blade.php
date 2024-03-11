@@ -4,8 +4,8 @@
 @endsection
 @section('content')
     <!--============================
-                                                                                                                                                BREADCRUMB START
-                                                                                                                                            ==============================-->
+                                                                                                                                                                                                                                                            BREADCRUMB START
+                                                                                                                                                                                                                                                        ==============================-->
     <section id="wsus__breadcrumb">
         <div class="wsus_breadcrumb_overlay">
             <div class="container">
@@ -23,13 +23,13 @@
         </div>
     </section>
     <!--============================
-                                                                                                                                                BREADCRUMB END
-                                                                                                                                            ==============================-->
+                                                                                                                                                                                                                                                            BREADCRUMB END
+                                                                                                                                                                                                                                                        ==============================-->
 
 
     <!--============================
-                                                                                                                                                CART VIEW PAGE START
-                                                                                                                                            ==============================-->
+                                                                                                                                                                                                                                                            CART VIEW PAGE START
+                                                                                                                                                                                                                                                        ==============================-->
     <section id="wsus__cart_view">
         <div class="container">
             <div class="row">
@@ -59,7 +59,7 @@
                                             quantity
                                         </th>
                                         <th class="wsus__pro_icon">
-                                            <a href="#" class="common_btn">clear cart</a>
+                                            <a href="#" class="common_btn clear-cart">clear cart</a>
                                         </th>
                                     </tr>
                                     @foreach ($cartItems as $item)
@@ -77,18 +77,20 @@
                                             </td>
 
                                             <td class="wsus__pro_status">
-                                                <p>{{ $settings->currency_icon . $item->price }}</p>
+                                                <h6>{{ $settings->currency_icon . $item->price }}</h6>
                                             </td>
                                             <td class="wsus__pro_tk">
-                                                <p>{{ $settings->currency_icon . $item->price + $item->options->variants_total }}
-                                                </p>
+                                                <h6 id="{{ $item->rowId }}">
+                                                    {{ $settings->currency_icon . ($item->price + $item->options->variants_total) * $item->qty }}
+                                                </h6>
                                             </td>
 
                                             <td class="wsus__pro_select">
                                                 <div class="cart-detail-group-button">
                                                     <button class="cart-detail-button-decrement button-decrement">-</button>
                                                     <input class="input-qty-cart" data-rowid="{{ $item->rowId }}"
-                                                        type="text" min="1" max="100" value="{{$item->qty}}" />
+                                                        type="text" min="1" max="100"
+                                                        value="{{ $item->qty }}" readonly />
                                                     <button class="cart-detail-button-increment button-increment">+</button>
 
                                                 </div>
@@ -97,11 +99,16 @@
 
 
                                             <td class="wsus__pro_icon">
-                                                <a href="#"><i class="far fa-times"></i></a>
+                                                <a href="{{ route('cart-delete-product', $item->rowId) }}"><i
+                                                        class="far fa-times"></i></a>
                                             </td>
                                         </tr>
                                     @endforeach
-
+                                    @if (count($cartItems) === 0)
+                                        <td class="wsus__pro_status" style="width: 100%">
+                                            <h6>cart is empty!</h6>
+                                        </td>
+                                    @endif
 
                                 </tbody>
                             </table>
@@ -159,8 +166,8 @@
         </div>
     </section>
     <!--============================
-                                                                                                                                                  CART VIEW PAGE END
-                                                                                                                                            ==============================-->
+                                                                                                                                                                                                                                                              CART VIEW PAGE END
+                                                                                                                                                                                                                                                        ==============================-->
 @endsection
 
 @push('scripts')
@@ -176,20 +183,6 @@
                 let rowId = input.data("rowid");
                 let quantity = parseInt(input.val()) + 1;
                 input.val(quantity);
-                // $.ajax({
-                //     url: "{{ route('update-product-quantity') }}",
-                //     method: "POST",
-                //     data: [
-                //         "rowId": rowId,
-                //         "quantity": quantity
-                //     ],
-                //     success: function(data) {
-
-                //     },
-                //     error: function(data) {
-
-                //     }
-                // })
                 $.ajax({
                     url: "{{ route('update-product-quantity') }}",
                     method: "POST",
@@ -199,13 +192,83 @@
                     },
                     success: function(data) {
                         // Xử lý khi request thành công
+                        let productId = "#" + rowId;
+                        let totalAmount = "{{ $settings->currency_icon }}" + data.product_total
+                        $(productId).text(totalAmount);
                         toastr.success(data.message);
-
                     },
                     error: function(xhr, status, error) {
                         // Xử lý khi có lỗi
                     }
                 });
+            })
+
+            $(".button-decrement").click(function() {
+                let input = $(this).siblings(".input-qty-cart");
+                let rowId = input.data("rowid");
+                let quantity = parseInt(input.val()) - 1;
+                input.val(quantity);
+                $.ajax({
+                    url: "{{ route('update-product-quantity') }}",
+                    method: "POST",
+                    data: {
+                        rowId: rowId,
+                        quantity: quantity
+                    },
+                    success: function(data) {
+                        // Xử lý khi request thành công
+                        let productId = "#" + rowId;
+                        let totalAmount = "{{ $settings->currency_icon }}" + data.product_total
+                        $(productId).text(totalAmount);
+                        toastr.success(data.message);
+                    },
+                    error: function(xhr, status, error) {
+                        // Xử lý khi có lỗi
+                    }
+                });
+            })
+
+            // clear cart
+            $(".clear-cart").click(function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: 'DELETE',
+                            url: "{{ route('clear-cart') }}",
+                            success: function(data) {
+                                if (data.status === 'success') {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        data.message,
+                                        'success'
+                                    )
+                                    window.location.reload();
+                                } else if (data.status === 'error') {
+                                    Swal.fire(
+                                        'Cant Delete!',
+                                        data.message,
+                                        'error'
+                                    )
+                                    //window.location.reload();
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.log(xhr);
+                                console.log(error);
+                            }
+                        })
+
+                    }
+                })
             })
         })
     </script>

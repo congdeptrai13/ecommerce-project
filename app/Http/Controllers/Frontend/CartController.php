@@ -60,9 +60,34 @@ class CartController extends Controller
     public function updateProductQuantity(Request $request)
     {
         Cart::update($request->rowId, $request->quantity);
+        $productTotal = $this->productDetail($request->rowId);
         return response()->json([
             "status" => "success",
-            "message" => "update quantity product successfully"
+            "message" => "update quantity product successfully",
+            "product_total" => $productTotal
         ]);
+    }
+
+    public function productDetail($rowId)
+    {
+        $product = Cart::get($rowId);
+        $total = ($product->price + $product->options->variants_total) * $product->qty;
+        return $total;
+    }
+
+    public function cartClear()
+    {
+        Cart::destroy();
+        return response()->json([
+            "status" => "success",
+            "message" => "destroy cart successfully"
+        ]);
+    }
+
+    public function cartDeleteProduct($rowId)
+    {
+        // dd($rowId);
+        Cart::remove($rowId);
+        return redirect()->back();
     }
 }

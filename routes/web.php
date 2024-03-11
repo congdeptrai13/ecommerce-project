@@ -62,3 +62,5 @@ Route::get('product-detail/{slug}', [FrontendProductController::class, "index"])
 Route::post("add-to-cart", [CartController::class, "addToCart"])->name("add-to-cart");
 Route::get("cart-details", [CartController::class, "cartViewDetail"])->name("cart-details");
 Route::post("update-product-quantity", [CartController::class, "updateProductQuantity"])->name("update-product-quantity");
+Route::delete("clear-cart", [CartController::class, "cartClear"])->name("clear-cart");
+Route::get("cart-delete-product/{rowId}", [CartController::class, "cartDeleteProduct"])->name("cart-delete-product");
