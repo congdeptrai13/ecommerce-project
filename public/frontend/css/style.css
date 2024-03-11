@@ -9523,3 +9523,23 @@ a:not([href]):not([class]):hover {
     -ms-transition: all linear 0.3s ease;
     -o-transition: all linear 0.3s ease;
 }
+
+.cart-detail-group-button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+
+.cart-detail-button-decrement,
+.cart-detail-button-increment {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+}
+
+.input-qty-cart{
+    width: 20%;
+}

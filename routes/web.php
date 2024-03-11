@@ -3,6 +3,7 @@
 use App\Http\Controllers\Backend\AdminController;
 use App\Http\Controllers\Backend\VendorController;
 use App\Http\Controllers\Frontend\AddressController;
+use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\FlashSaleController;
 use App\Http\Controllers\Frontend\FrontendProductController;
 use App\Http\Controllers\Frontend\HomeController;
@@ -56,3 +57,8 @@ Route::get('flash-sale', [FlashSaleController::class, "index"])->name('flash-sal
 
 // frontend product route
 Route::get('product-detail/{slug}', [FrontendProductController::class, "index"])->name('product-detail');
+
+// cart route
+Route::post("add-to-cart", [CartController::class, "addToCart"])->name("add-to-cart");
+Route::get("cart-details", [CartController::class, "cartViewDetail"])->name("cart-details");
+Route::post("update-product-quantity", [CartController::class, "updateProductQuantity"])->name("update-product-quantity");

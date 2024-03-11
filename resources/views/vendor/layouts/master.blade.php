@@ -8,7 +8,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <title>One Shop || e-Commerce HTML Template</title>
+    <title>
+        @yield('title')
+    </title>
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" href="{{ asset('frontend/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">

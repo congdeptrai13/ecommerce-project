@@ -1,5 +1,7 @@
 @extends('admin.layout.master')
-
+@section('title')
+{{$settings->site_name}} || Admin Product Variant
+@endsection
 @section('content')
     <!-- Main Content -->
     <section class="section">

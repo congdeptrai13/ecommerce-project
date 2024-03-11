@@ -1,8 +1,11 @@
 @extends('frontend.layouts.master')
+@section('title')
+    {{ $settings->site_name }} || Forget Password
+@endsection
 @section('content')
     <!--============================
-                                BREADCRUMB START
-                            ==============================-->
+                                    BREADCRUMB START
+                                ==============================-->
     <section id="wsus__breadcrumb">
         <div class="wsus_breadcrumb_overlay">
             <div class="container">
@@ -19,13 +22,13 @@
         </div>
     </section>
     <!--============================
-                                BREADCRUMB END
-                            ==============================-->
+                                    BREADCRUMB END
+                                ==============================-->
 
 
     <!--============================
-                                FORGET PASSWORD START
-                            ==============================-->
+                                    FORGET PASSWORD START
+                                ==============================-->
     <section id="wsus__login_register">
         <div class="container">
             <div class="row">
@@ -38,7 +41,7 @@
                             <form method="POST" action="{{ route('password.email') }}">
                                 @csrf
                                 @php
-                                    
+
                                 @endphp
                                 <div class="wsus__login_input">
                                     <i class="fal fa-envelope"></i>
@@ -54,6 +57,6 @@
         </div>
     </section>
     <!--============================
-                                FORGET PASSWORD END
-                            ==============================-->
+                                    FORGET PASSWORD END
+                                ==============================-->
 @endsection

@@ -1,9 +1,11 @@
 @extends('frontend.layouts.master')
-
+@section('title')
+    {{ $settings->site_name }} || Product Detail
+@endsection
 @section('content')
     <!--============================
-                                                                            BREADCRUMB START
-                                                                        ==============================-->
+                                                                                                                                            BREADCRUMB START
+                                                                                                                                        ==============================-->
     <section id="wsus__breadcrumb">
         <div class="wsus_breadcrumb_overlay">
             <div class="container">
@@ -21,19 +23,19 @@
         </div>
     </section>
     <!--============================
-                                                                            BREADCRUMB END
-                                                                        ==============================-->
+                                                                                                                                            BREADCRUMB END
+                                                                                                                                        ==============================-->
 
 
     <!--============================
-                                                                            PRODUCT DETAILS START
-                                                                        ==============================-->
+                                                                                                                                            PRODUCT DETAILS START
+                                                                                                                                        ==============================-->
     <section id="wsus__product_details">
         <div class="container">
             <div class="wsus__details_bg">
                 <div class="row">
                     <div class="col-xl-4 col-md-5 col-lg-5" style="z-index:9999 !important;">
-                        <div id="sticky_pro_zoom" >
+                        <div id="sticky_pro_zoom">
                             <div class="exzoom hidden" id="exzoom">
                                 <div class="exzoom_img_box">
                                     @if (isset($product->video_link))
@@ -69,7 +71,9 @@
                             <p class="wsus__stock_area"><span class="in_stock">in stock</span> ({{ $product->qty }} item)
                             </p>
                             @if (checkDiscount($product))
-                                <h4>{{ $settings->currency_icon }}{{ $product->offer_price }} <del>{{ $settings->currency_icon }}{{ $product->price }}</del></h4>
+                                <h4>{{ $settings->currency_icon }}{{ $product->offer_price }}
+                                    <del>{{ $settings->currency_icon }}{{ $product->price }}</del>
+                                </h4>
                             @else
                                 <h4>{{ $settings->currency_icon }}{{ $product->price }}</h4>
                             @endif
@@ -89,37 +93,41 @@
                                     <div class="simply-countdown simply-countdown-one"></div>
                                 </div>
                             @endif
-                            <div class="wsus__selectbox">
-                                <div class="row">
-                                    @foreach ($product->variant as $variant)
-                                        <div class="col-xl-6 col-sm-6">
-                                            <h5 class="mb-2">{{ $variant->name }}</h5>
-                                            <select class="select_2" name="state">
-                                                @foreach ($variant->variantItem as $item)
-                                                    <option {{ $item->is_default === 1 ? 'selected' : '' }}>
-                                                        {{ $item->name }} (${{ $item->price }})</option>
-                                                @endforeach
+                            <form class="shopping-cart-form">
+                                <div class="wsus__selectbox">
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <div class="row">
+                                        @foreach ($product->variant as $variant)
+                                            <div class="col-xl-6 col-sm-6">
+                                                <h5 class="mb-2">{{ $variant->name }}</h5>
+                                                <select class="select_2" name="variants_Items[]">
+                                                    @foreach ($variant->variantItem as $item)
+                                                        <option {{ $item->is_default === 1 ? 'selected' : '' }}
+                                                            value="{{ $item->id }}">
+                                                            {{ $item->name }} (${{ $item->price }})</option>
+                                                    @endforeach
 
-                                            </select>
-                                        </div>
-                                    @endforeach
+                                                </select>
+                                            </div>
+                                        @endforeach
 
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="wsus__quentity">
-                                <h5>quantity :</h5>
-                                <form class="select_number">
-                                    <input class="number_area" type="text" min="1" max="100"
-                                        value="1" />
-                                </form>
-                            </div>
+                                <div class="wsus__quentity">
+                                    <h5>quantity :</h5>
+                                    <div class="select_number">
+                                        <input class="number_area" type="text" min="1" max="100"
+                                            value="1" name="qty" />
+                                    </div>
+                                </div>
 
-                            <ul class="wsus__button_area">
-                                <li><a class="add_cart" href="#">add to cart</a></li>
-                                <li><a class="buy_now" href="#">buy now</a></li>
-                                <li><a href="#"><i class="fal fa-heart"></i></a></li>
-                                <li><a href="#"><i class="far fa-random"></i></a></li>
-                            </ul>
+                                <ul class="wsus__button_area">
+                                    <li><button type="submit" class="add_cart" href="#">add to cart</button></li>
+                                    <li><a class="buy_now" href="#">buy now</a></li>
+                                    <li><a href="#"><i class="fal fa-heart"></i></a></li>
+                                    <li><a href="#"><i class="far fa-random"></i></a></li>
+                                </ul>
+                            </form>
                             <p class="brand_model"><span>brand :</span> {{ $product->brand->name }}</p>
                         </div>
                     </div>
@@ -412,13 +420,13 @@
         </div>
     </section>
     <!--============================
-                                                                            PRODUCT DETAILS END
-                                                                        ==============================-->
+                                                                                                                                            PRODUCT DETAILS END
+                                                                                                                                        ==============================-->
 
 
     <!--============================
-                                                                            RELATED PRODUCT START
-                                                                        ==============================-->
+                                                                                                                                            RELATED PRODUCT START
+                                                                                                                                        {{-- ==============================-->
     <section id="wsus__flash_sell">
         <div class="container">
             <div class="row">
@@ -582,8 +590,8 @@
         </div>
     </section>
     <!--============================
-                                                                            RELATED PRODUCT END
-                                                                        ==============================-->
+                                                                                        RELATED PRODUCT END --}}
+                                                                                                                                        ==============================-->
 @endsection
 @push('scripts')
     <script>
@@ -594,6 +602,30 @@
                 day: {{ date('d', strtotime($flashSale->end_date)) }},
                 enableUtc: true
             });
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $(".shopping-cart-form").on("submit", function(e) {
+                e.preventDefault();
+                let formData = $(this).serialize();
+                $.ajax({
+                    method: "POST",
+                    data: formData,
+                    url: "{{ route('add-to-cart') }}",
+                    success: function(data) {
+
+                    },
+                    error: function(data) {
+
+                    }
+                })
+            })
+            $.ajax({
+
+            })
         })
     </script>
 @endpush

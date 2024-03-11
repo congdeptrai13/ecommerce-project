@@ -1,5 +1,7 @@
 @extends('admin.layout.master')
-
+@section('title')
+{{$settings->site_name}} || Admin Dashboard
+@endsection
 @section('content')
     <section class="section">
         <div class="section-header">
