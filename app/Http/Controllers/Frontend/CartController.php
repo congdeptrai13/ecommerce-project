@@ -90,4 +90,8 @@ class CartController extends Controller
         Cart::remove($rowId);
         return redirect()->back();
     }
+
+    public function updateCartCount(){
+        return Cart::content()->count();
+    }
 }

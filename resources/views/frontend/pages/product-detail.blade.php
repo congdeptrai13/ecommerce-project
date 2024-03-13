@@ -4,8 +4,8 @@
 @endsection
 @section('content')
     <!--============================
-                                                                                                                                            BREADCRUMB START
-                                                                                                                                        ==============================-->
+                                                                                                                                                                        BREADCRUMB START
+                                                                                                                                                                    ==============================-->
     <section id="wsus__breadcrumb">
         <div class="wsus_breadcrumb_overlay">
             <div class="container">
@@ -23,13 +23,13 @@
         </div>
     </section>
     <!--============================
-                                                                                                                                            BREADCRUMB END
-                                                                                                                                        ==============================-->
+                                                                                                                                                                        BREADCRUMB END
+                                                                                                                                                                    ==============================-->
 
 
     <!--============================
-                                                                                                                                            PRODUCT DETAILS START
-                                                                                                                                        ==============================-->
+                                                                                                                                                                        PRODUCT DETAILS START
+                                                                                                                                                                    ==============================-->
     <section id="wsus__product_details">
         <div class="container">
             <div class="wsus__details_bg">
@@ -420,13 +420,13 @@
         </div>
     </section>
     <!--============================
-                                                                                                                                            PRODUCT DETAILS END
-                                                                                                                                        ==============================-->
+                                                                                                                                                                        PRODUCT DETAILS END
+                                                                                                                                                                    ==============================-->
 
 
     <!--============================
-                                                                                                                                            RELATED PRODUCT START
-                                                                                                                                        {{-- ==============================-->
+                                                                                                                                                                        RELATED PRODUCT START
+                                                                                                                                                                    {{-- ==============================-->
     <section id="wsus__flash_sell">
         <div class="container">
             <div class="row">
@@ -591,7 +591,7 @@
     </section>
     <!--============================
                                                                                         RELATED PRODUCT END --}}
-                                                                                                                                        ==============================-->
+                                                                                                                                                                    ==============================-->
 @endsection
 @push('scripts')
     <script>
@@ -616,16 +616,27 @@
                     data: formData,
                     url: "{{ route('add-to-cart') }}",
                     success: function(data) {
-
+                        updateCartCount();
+                        toastr.success(data.message);
                     },
                     error: function(data) {
 
                     }
                 })
             })
-            $.ajax({
 
-            })
+            function updateCartCount() {
+                $.ajax({
+                    method: "GET",
+                    url: "{{ route('cart-count') }}",
+                    success: function(data) {
+                        $("#cart-count").text(data);
+                    },
+                    error: function(data) {
+
+                    }
+                })
+            }
         })
     </script>
 @endpush

@@ -64,3 +64,4 @@ Route::get("cart-details", [CartController::class, "cartViewDetail"])->name("car
 Route::post("update-product-quantity", [CartController::class, "updateProductQuantity"])->name("update-product-quantity");
 Route::delete("clear-cart", [CartController::class, "cartClear"])->name("clear-cart");
 Route::get("cart-delete-product/{rowId}", [CartController::class, "cartDeleteProduct"])->name("cart-delete-product");
+Route::get("cart-count", [CartController::class, "updateCartCount"])->name("cart-count");
