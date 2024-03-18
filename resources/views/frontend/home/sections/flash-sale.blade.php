@@ -63,7 +63,37 @@
                             @else
                                 <p class="wsus__price">{{ $settings->currency_icon }}{{ $product->price }}</p>
                             @endif
-                            <a class="add_cart" href="#">add to cart</a>
+                            <form class="shopping-cart-form">
+                                <div class="d-none">
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <div class="row">
+                                        @foreach ($product->variant as $variant)
+                                            <div class="col-xl-6 col-sm-6">
+                                                <h5 class="mb-2">{{ $variant->name }}</h5>
+                                                <select class="select_2" name="variants_Items[]">
+                                                    @foreach ($variant->variantItem as $item)
+                                                        <option {{ $item->is_default === 1 ? 'selected' : '' }}
+                                                            value="{{ $item->id }}">
+                                                            {{ $item->name }} (${{ $item->price }})</option>
+                                                    @endforeach
+
+                                                </select>
+                                            </div>
+                                        @endforeach
+
+                                    </div>
+                                </div>
+                                <div class="d-none">
+                                    <h5>quantity :</h5>
+                                    <div class="select_number">
+                                        <input class="number_area" type="text" min="1" max="100"
+                                            value="1" name="qty" />
+                                    </div>
+                                </div>
+                                <input hidden type="text" min="1" max="100"
+                                    value="1" name="qty" />
+                                <button type="submit" class="add_cart" href="#">add to cart</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -137,38 +167,43 @@
                                         <span>20 review</span>
                                     </p>
                                     <p class="description">{!! $product->short_description !!}</p>
-                                    <div class="wsus__selectbox">
-                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        <div class="row">
-                                            @foreach ($product->variant as $variant)
-                                                <div class="col-xl-6 col-sm-6">
-                                                    <h5 class="mb-2">{{ $variant->name }}</h5>
-                                                    <select class="select_2" name="variants_Items[]">
-                                                        @foreach ($variant->variantItem as $item)
-                                                            <option {{ $item->is_default === 1 ? 'selected' : '' }}
-                                                                value="{{ $item->id }}">
-                                                                {{ $item->name }} (${{ $item->price }})</option>
-                                                        @endforeach
+                                    <form class="shopping-cart-form">
+                                        <div class="wsus__selectbox">
+                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                            <div class="row">
+                                                @foreach ($product->variant as $variant)
+                                                    <div class="col-xl-6 col-sm-6">
+                                                        <h5 class="mb-2">{{ $variant->name }}</h5>
+                                                        <select class="select_2" name="variants_Items[]">
+                                                            @foreach ($variant->variantItem as $item)
+                                                                <option {{ $item->is_default === 1 ? 'selected' : '' }}
+                                                                    value="{{ $item->id }}">
+                                                                    {{ $item->name }} (${{ $item->price }})
+                                                                </option>
+                                                            @endforeach
 
-                                                    </select>
-                                                </div>
-                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                @endforeach
 
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="wsus__quentity">
-                                        <h5>quantity :</h5>
-                                        <div class="select_number">
-                                            <input class="number_area" type="text" min="1" max="100"
-                                                value="1" name="qty" />
+                                        <div class="wsus__quentity">
+                                            <h5>quantity :</h5>
+                                            <div class="select_number">
+                                                <input class="number_area" type="text" min="1"
+                                                    max="100" value="1" name="qty" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <ul class="wsus__button_area">
-                                        <li><a class="add_cart" href="#">add to cart</a></li>
-                                        <li><a class="buy_now" href="#">buy now</a></li>
-                                        <li><a href="#"><i class="fal fa-heart"></i></a></li>
-                                        <li><a href="#"><i class="far fa-random"></i></a></li>
-                                    </ul>
+
+                                        <ul class="wsus__button_area">
+                                            <li><button type="submit" class="add_cart" href="#">add to
+                                                    cart</button></li>
+                                            <li><a class="buy_now" href="#">buy now</a></li>
+                                            <li><a href="#"><i class="fal fa-heart"></i></a></li>
+                                            <li><a href="#"><i class="far fa-random"></i></a></li>
+                                        </ul>
+                                    </form>
                                     <p class="brand_model"><span>brand :</span> {{ $product->brand->name }}</p>
                                 </div>
                             </div>

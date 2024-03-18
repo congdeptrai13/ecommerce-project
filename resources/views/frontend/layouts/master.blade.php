@@ -153,6 +153,7 @@
         @endif
     </script>
     @stack('scripts')
+    @include('frontend.layouts.scripts');
 
 </body>
 

@@ -266,10 +266,10 @@
                                 console.log(error);
                             }
                         })
-
                     }
                 })
             })
+
         })
     </script>
 @endpush

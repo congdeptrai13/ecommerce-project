@@ -1,5 +1,7 @@
 <?php
 
+use Gloudemans\Shoppingcart\Facades\Cart;
+
 //active sidebar
 function setActive(array $routes)
 {
@@ -41,4 +43,14 @@ function productType(string $type)
         default:
             return "None";
     }
+}
+
+function miniCartAmount()
+{
+    $total = 0;
+    foreach (Cart::content() as $product) {
+        $total += ($product->price + $product->options->variants_total) * $product->qty;
+
+    }
+    return $total;
 }

@@ -4,8 +4,8 @@
 @endsection
 @section('content')
     <!--============================
-                                                                                BREADCRUMB START
-                                                                            ==============================-->
+                                                                                                            BREADCRUMB START
+                                                                                                        ==============================-->
     <section id="wsus__breadcrumb">
         <div class="wsus_breadcrumb_overlay">
             <div class="container">
@@ -22,13 +22,13 @@
         </div>
     </section>
     <!--============================
-                                                                                BREADCRUMB END
-                                                                            ==============================-->
+                                                                                                            BREADCRUMB END
+                                                                                                        ==============================-->
 
 
     <!--============================
-                                                                                DAILY DEALS DETAILS START
-                                                                            ==============================-->
+                                                                                                            DAILY DEALS DETAILS START
+                                                                                                        ==============================-->
     <section id="wsus__daily_deals">
         <div class="container">
             <div class="wsus__offer_details_area">
@@ -121,7 +121,37 @@
                                     @else
                                         <p class="wsus__price">{{ $settings->currency_icon }}{{ $product->price }}</p>
                                     @endif
-                                    <a class="add_cart" href="#">add to cart</a>
+                                    <form class="shopping-cart-form">
+                                        <div class="wsus__selectbox d-none">
+                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                            <div class="row">
+                                                @foreach ($product->variant as $variant)
+                                                    <div class="col-xl-6 col-sm-6">
+                                                        <h5 class="mb-2">{{ $variant->name }}</h5>
+                                                        <select class="select_2" name="variants_Items[]">
+                                                            @foreach ($variant->variantItem as $item)
+                                                                <option {{ $item->is_default === 1 ? 'selected' : '' }}
+                                                                    value="{{ $item->id }}">
+                                                                    {{ $item->name }} (${{ $item->price }})</option>
+                                                            @endforeach
+
+                                                        </select>
+                                                    </div>
+                                                @endforeach
+
+                                            </div>
+                                        </div>
+                                        <div class="wsus__quentity d-none">
+                                            <h5>quantity :</h5>
+                                            <div class="select_number">
+                                                <input class="number_area" type="text" min="1" max="100"
+                                                    value="1" name="qty" />
+                                            </div>
+                                        </div>
+                                        <input class="number_area" hidden type="text" min="1" max="100"
+                                            value="1" name="qty" />
+                                        <button type="submit" class="add_cart" href="#">add to cart</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -136,8 +166,8 @@
         </div>
     </section>
     <!--============================
-                                                                                DAILY DEALS DETAILS END
-                                                                            ==============================-->
+                                                                                                            DAILY DEALS DETAILS END
+                                                                                                        ==============================-->
 @endsection
 @push('scripts')
     <script>

@@ -65,3 +65,6 @@ Route::post("update-product-quantity", [CartController::class, "updateProductQua
 Route::delete("clear-cart", [CartController::class, "cartClear"])->name("clear-cart");
 Route::get("cart-delete-product/{rowId}", [CartController::class, "cartDeleteProduct"])->name("cart-delete-product");
 Route::get("cart-count", [CartController::class, "updateCartCount"])->name("cart-count");
+Route::get("mini-cart-amount", [CartController::class, "miniCartAmount"])->name("mini-cart-amount");
+Route::get("cart-content", [CartController::class, "getCartContent"])->name("cart-content");
+Route::post("mini-cart-remove", [CartController::class, "miniCartRemove"])->name("mini-cart-remove");

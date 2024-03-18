@@ -75,6 +75,15 @@ class CartController extends Controller
         return $total;
     }
 
+    public function miniCartAmount()
+    {
+        $total = 0;
+        foreach (Cart::content() as $product) {
+            $total += $this->productDetail($product->rowId);
+        }
+        return $total;
+    }
+
     public function cartClear()
     {
         Cart::destroy();
@@ -91,7 +100,22 @@ class CartController extends Controller
         return redirect()->back();
     }
 
-    public function updateCartCount(){
+    public function updateCartCount()
+    {
         return Cart::content()->count();
+    }
+
+    public function getCartContent()
+    {
+        return Cart::content();
+    }
+
+    public function miniCartRemove(Request $request)
+    {
+        Cart::remove($request->rowId);
+        return response()->json([
+            "status" => "success",
+            "message" => "remove product from mini cart successfully"
+        ]);
     }
 }
