@@ -4,8 +4,8 @@
 @endsection
 @section('content')
     <!--============================
-                                                                                                                                                                                                                                                            BREADCRUMB START
-                                                                                                                                                                                                                                                        ==============================-->
+                                                                                                                                                                                                                                                                BREADCRUMB START
+                                                                                                                                                                                                                                                            ==============================-->
     <section id="wsus__breadcrumb">
         <div class="wsus_breadcrumb_overlay">
             <div class="container">
@@ -23,13 +23,13 @@
         </div>
     </section>
     <!--============================
-                                                                                                                                                                                                                                                            BREADCRUMB END
-                                                                                                                                                                                                                                                        ==============================-->
+                                                                                                                                                                                                                                                                BREADCRUMB END
+                                                                                                                                                                                                                                                            ==============================-->
 
 
     <!--============================
-                                                                                                                                                                                                                                                            CART VIEW PAGE START
-                                                                                                                                                                                                                                                        ==============================-->
+                                                                                                                                                                                                                                                                CART VIEW PAGE START
+                                                                                                                                                                                                                                                            ==============================-->
     <section id="wsus__cart_view">
         <div class="container">
             <div class="row">
@@ -166,8 +166,8 @@
         </div>
     </section>
     <!--============================
-                                                                                                                                                                                                                                                              CART VIEW PAGE END
-                                                                                                                                                                                                                                                        ==============================-->
+                                                                                                                                                                                                                                                                  CART VIEW PAGE END
+                                                                                                                                                                                                                                                            ==============================-->
 @endsection
 
 @push('scripts')
@@ -178,97 +178,6 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            $(".button-increment").click(function() {
-                let input = $(this).siblings(".input-qty-cart");
-                let rowId = input.data("rowid");
-                let quantity = parseInt(input.val()) + 1;
-                input.val(quantity);
-                $.ajax({
-                    url: "{{ route('update-product-quantity') }}",
-                    method: "POST",
-                    data: {
-                        rowId: rowId,
-                        quantity: quantity
-                    },
-                    success: function(data) {
-                        // Xử lý khi request thành công
-                        let productId = "#" + rowId;
-                        let totalAmount = "{{ $settings->currency_icon }}" + data.product_total
-                        $(productId).text(totalAmount);
-                        toastr.success(data.message);
-                    },
-                    error: function(xhr, status, error) {
-                        // Xử lý khi có lỗi
-                    }
-                });
-            })
-
-            $(".button-decrement").click(function() {
-                let input = $(this).siblings(".input-qty-cart");
-                let rowId = input.data("rowid");
-                let quantity = parseInt(input.val()) - 1;
-                input.val(quantity);
-                $.ajax({
-                    url: "{{ route('update-product-quantity') }}",
-                    method: "POST",
-                    data: {
-                        rowId: rowId,
-                        quantity: quantity
-                    },
-                    success: function(data) {
-                        // Xử lý khi request thành công
-                        let productId = "#" + rowId;
-                        let totalAmount = "{{ $settings->currency_icon }}" + data.product_total
-                        $(productId).text(totalAmount);
-                        toastr.success(data.message);
-                    },
-                    error: function(xhr, status, error) {
-                        // Xử lý khi có lỗi
-                    }
-                });
-            })
-
-            // clear cart
-            $(".clear-cart").click(function(e) {
-                e.preventDefault();
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            type: 'DELETE',
-                            url: "{{ route('clear-cart') }}",
-                            success: function(data) {
-                                if (data.status === 'success') {
-                                    Swal.fire(
-                                        'Deleted!',
-                                        data.message,
-                                        'success'
-                                    )
-                                    window.location.reload();
-                                } else if (data.status === 'error') {
-                                    Swal.fire(
-                                        'Cant Delete!',
-                                        data.message,
-                                        'error'
-                                    )
-                                    //window.location.reload();
-                                }
-                            },
-                            error: function(xhr, status, error) {
-                                console.log(xhr);
-                                console.log(error);
-                            }
-                        })
-                    }
-                })
-            })
 
         })
     </script>

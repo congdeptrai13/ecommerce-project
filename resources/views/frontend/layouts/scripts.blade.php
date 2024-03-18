@@ -1,12 +1,5 @@
 <script>
     $(document).ready(function() {
-        simplyCountdown('.simply-countdown-one', {
-            year: {{ date('Y', strtotime($flashSale->end_date)) }},
-            month: {{ date('m', strtotime($flashSale->end_date)) }},
-            day: {{ date('d', strtotime($flashSale->end_date)) }},
-            enableUtc: true
-        });
-
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -20,11 +13,16 @@
                 data: formData,
                 url: "{{ route('add-to-cart') }}",
                 success: function(data) {
-                    updateCartCount();
-                    fetchCartContent();
-                    fetchMiniCartAmount();
-                    $(".mini_cart_actions").removeClass("d-none");
-                    toastr.success(data.message);
+                    if (data.status === "success") {
+
+                        updateCartCount();
+                        fetchCartContent();
+                        fetchMiniCartAmount();
+                        $(".mini_cart_actions").removeClass("d-none");
+                        toastr.success(data.message);
+                    } else if (data.status === "stock_out") {
+                        toastr.error(data.message);
+                    }
                 },
                 error: function(data) {
 
@@ -126,7 +124,210 @@
                 }
             })
         }
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            // $(".button-increment").click(function() {
+            //     let input = $(this).siblings(".input-qty-cart");
+            //     let rowId = input.data("rowid");
+            //     let quantity = parseInt(input.val()) + 1;
+            //     input.val(quantity);
+            //     $.ajax({
+            //         url: "{{ route('update-product-quantity') }}",
+            //         method: "POST",
+            //         data: {
+            //             rowId: rowId,
+            //             quantity: quantity
+            //         },
+            //         success: function(data) {
+            //             // Xử lý khi request thành công
+            //             let productId = "#" + rowId;
+            //             let totalAmount = "{{ $settings->currency_icon }}" + data
+            //                 .product_total
+            //             $(productId).text(totalAmount);
+            //             toastr.success(data.message);
+            //         },
+            //         error: function(xhr, status, error) {
+            //             // Xử lý khi có lỗi
+            //         }
+            //     });
+            // })
 
+            // $(".button-decrement").click(function() {
+            //     let input = $(this).siblings(".input-qty-cart");
+            //     let rowId = input.data("rowid");
+            //     let quantity = parseInt(input.val()) - 1;
+            //     input.val(quantity);
+            //     $.ajax({
+            //         url: "{{ route('update-product-quantity') }}",
+            //         method: "POST",
+            //         data: {
+            //             rowId: rowId,
+            //             quantity: quantity
+            //         },
+            //         success: function(data) {
+            //             // Xử lý khi request thành công
+            //             let productId = "#" + rowId;
+            //             let totalAmount = "{{ $settings->currency_icon }}" + data
+            //                 .product_total
+            //             $(productId).text(totalAmount);
+            //             toastr.success(data.message);
+            //         },
+            //         error: function(xhr, status, error) {
+            //             // Xử lý khi có lỗi
+            //         }
+            //     });
+            // })
+
+            // clear cart
+            $(".clear-cart").click(function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: 'DELETE',
+                            url: "{{ route('clear-cart') }}",
+                            success: function(data) {
+                                if (data.status === 'success') {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        data.message,
+                                        'success'
+                                    )
+                                    window.location.reload();
+                                } else if (data.status === 'error') {
+                                    Swal.fire(
+                                        'Cant Delete!',
+                                        data.message,
+                                        'error'
+                                    )
+                                    //window.location.reload();
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.log(xhr);
+                                console.log(error);
+                            }
+                        })
+                    }
+                })
+            })
+
+        })
+
+        $(".button-increment").click(function() {
+            let input = $(this).siblings(".input-qty-cart");
+            let rowId = input.data("rowid");
+            let quantity = parseInt(input.val()) + 1;
+            input.val(quantity);
+            $.ajax({
+                url: "{{ route('update-product-quantity') }}",
+                method: "POST",
+                data: {
+                    rowId: rowId,
+                    quantity: quantity
+                },
+                success: function(data) {
+                    // Xử lý khi request thành công
+                    if (data.status === "success") {
+                        let productId = "#" + rowId;
+                        let totalAmount = "{{ $settings->currency_icon }}" + data
+                            .product_total
+                        $(productId).text(totalAmount);
+                        toastr.success(data.message);
+                    } else if (data.status === "stock_out") {
+                        toastr.error(data.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Xử lý khi có lỗi
+                }
+            });
+        })
+
+        $(".button-decrement").click(function() {
+            let input = $(this).siblings(".input-qty-cart");
+            let rowId = input.data("rowid");
+            let quantity = parseInt(input.val()) - 1;
+            input.val(quantity);
+            $.ajax({
+                url: "{{ route('update-product-quantity') }}",
+                method: "POST",
+                data: {
+                    rowId: rowId,
+                    quantity: quantity
+                },
+                success: function(data) {
+                    // Xử lý khi request thành công
+                    if (data.status === "success") {
+
+                        let productId = "#" + rowId;
+                        let totalAmount = "{{ $settings->currency_icon }}" + data
+                            .product_total
+                        $(productId).text(totalAmount);
+                        toastr.success(data.message);
+                    } else if (data.status === "stock_out") {
+                        toastr.error(data.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Xử lý khi có lỗi
+                }
+            });
+        })
+
+        // clear cart
+        $(".clear-cart").click(function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: "{{ route('clear-cart') }}",
+                        success: function(data) {
+                            if (data.status === 'success') {
+                                Swal.fire(
+                                    'Deleted!',
+                                    data.message,
+                                    'success'
+                                )
+                                window.location.reload();
+                            } else if (data.status === 'error') {
+                                Swal.fire(
+                                    'Cant Delete!',
+                                    data.message,
+                                    'error'
+                                )
+                                //window.location.reload();
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.log(xhr);
+                            console.log(error);
+                        }
+                    })
+                }
+            })
+        })
 
     })
 </script>
