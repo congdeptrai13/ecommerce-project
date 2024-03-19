@@ -130,57 +130,6 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            // $(".button-increment").click(function() {
-            //     let input = $(this).siblings(".input-qty-cart");
-            //     let rowId = input.data("rowid");
-            //     let quantity = parseInt(input.val()) + 1;
-            //     input.val(quantity);
-            //     $.ajax({
-            //         url: "{{ route('update-product-quantity') }}",
-            //         method: "POST",
-            //         data: {
-            //             rowId: rowId,
-            //             quantity: quantity
-            //         },
-            //         success: function(data) {
-            //             // Xử lý khi request thành công
-            //             let productId = "#" + rowId;
-            //             let totalAmount = "{{ $settings->currency_icon }}" + data
-            //                 .product_total
-            //             $(productId).text(totalAmount);
-            //             toastr.success(data.message);
-            //         },
-            //         error: function(xhr, status, error) {
-            //             // Xử lý khi có lỗi
-            //         }
-            //     });
-            // })
-
-            // $(".button-decrement").click(function() {
-            //     let input = $(this).siblings(".input-qty-cart");
-            //     let rowId = input.data("rowid");
-            //     let quantity = parseInt(input.val()) - 1;
-            //     input.val(quantity);
-            //     $.ajax({
-            //         url: "{{ route('update-product-quantity') }}",
-            //         method: "POST",
-            //         data: {
-            //             rowId: rowId,
-            //             quantity: quantity
-            //         },
-            //         success: function(data) {
-            //             // Xử lý khi request thành công
-            //             let productId = "#" + rowId;
-            //             let totalAmount = "{{ $settings->currency_icon }}" + data
-            //                 .product_total
-            //             $(productId).text(totalAmount);
-            //             toastr.success(data.message);
-            //         },
-            //         error: function(xhr, status, error) {
-            //             // Xử lý khi có lỗi
-            //         }
-            //     });
-            // })
 
             // clear cart
             $(".clear-cart").click(function(e) {
@@ -245,6 +194,7 @@
                         let totalAmount = "{{ $settings->currency_icon }}" + data
                             .product_total
                         $(productId).text(totalAmount);
+                        fetchAmountInCartDetail();
                         toastr.success(data.message);
                     } else if (data.status === "stock_out") {
                         toastr.error(data.message);
@@ -276,6 +226,7 @@
                         let totalAmount = "{{ $settings->currency_icon }}" + data
                             .product_total
                         $(productId).text(totalAmount);
+                        fetchAmountInCartDetail();
                         toastr.success(data.message);
                     } else if (data.status === "stock_out") {
                         toastr.error(data.message);
@@ -328,6 +279,22 @@
                 }
             })
         })
+
+        //fetch subtotal in cart-detail
+        function fetchAmountInCartDetail() {
+            $.ajax({
+                type: 'GET',
+                url: "{{ route('mini-cart-amount') }}",
+                success: function(data) {
+                    $("#sub_total_cart").text(
+                        `{{ $settings->currency_icon }}${data}`);
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr);
+                    console.log(error);
+                }
+            })
+        }
 
     })
 </script>

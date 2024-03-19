@@ -65,6 +65,10 @@ class CartController extends Controller
     public function cartViewDetail()
     {
         $cartItems = Cart::content();
+        if (count($cartItems) === 0) {
+            toastr("cart empty add some product to view", "warning");
+            return redirect()->route("home");
+        }
         // dd($cartItems);
         return view('frontend.pages.cart-detail', compact("cartItems"));
     }
@@ -122,6 +126,7 @@ class CartController extends Controller
     {
         // dd($rowId);
         Cart::remove($rowId);
+        toastr("delete successfully", "success");
         return redirect()->back();
     }
 
