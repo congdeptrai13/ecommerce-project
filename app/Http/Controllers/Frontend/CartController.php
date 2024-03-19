@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Coupon;
 use App\Models\Product;
 use App\Models\Variant;
 use App\Models\VariantItem;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
@@ -66,6 +68,7 @@ class CartController extends Controller
     {
         $cartItems = Cart::content();
         if (count($cartItems) === 0) {
+            Session::forget("coupon");
             toastr("cart empty add some product to view", "warning");
             return redirect()->route("home");
         }
@@ -146,6 +149,100 @@ class CartController extends Controller
         return response()->json([
             "status" => "success",
             "message" => "remove product from mini cart successfully"
+        ]);
+    }
+
+    public function applyCoupon(Request $request)
+    {
+        // dd($request->all());
+        if ($request->coupon_code === null) {
+            return response()->json([
+                "status" => 'error',
+                "message" => "field coupon code is required"
+            ]);
+        }
+
+        $coupon = Coupon::where([
+            "code" => $request->coupon_code,
+            "status" => 1
+        ])->first();
+        if ($coupon === null) {
+            return response()->json([
+                "status" => 'error',
+                "message" => "coupon isn't exists"
+            ]);
+        } elseif ($coupon->start_date > date("Y-m-d")) {
+            return response()->json([
+                "status" => 'error',
+                "message" => "coupon isn't exists"
+            ]);
+        } elseif ($coupon->end_date < date("Y-m-d")) {
+            return response()->json([
+                "status" => 'error',
+                "message" => "coupon is expired"
+            ]);
+        } elseif ($coupon->total_used >= $coupon->quantity) {
+            return response()->json([
+                "status" => 'error',
+                "message" => "can't apply this coupon"
+            ]);
+        }
+
+        if ($coupon->discount_type === "amount") {
+            Session::put("coupon", [
+                "coupon_name" => $coupon->name,
+                "coupon_code" => $coupon->code,
+                "discount_type" => $coupon->discount_type,
+                "discount" => $coupon->discount
+            ]);
+        }
+
+        if ($coupon->discount_type === "percent") {
+            Session::put("coupon", [
+                "coupon_name" => $coupon->name,
+                "coupon_code" => $coupon->code,
+                "discount_type" => $coupon->discount_type,
+                "discount" => $coupon->discount
+            ]);
+        }
+
+
+        return response()->json([
+            "status" => 'success',
+            "message" => "apply coupon successfully"
+        ]);
+    }
+
+    public function couponCalculate()
+    {
+        $coupon = Session::get("coupon");
+        $subTotal = miniCartAmount();
+        if (Session::has('coupon')) {
+            if ($coupon["discount_type"] === 'amount') {
+                $total = $subTotal - $coupon["discount"];
+                return response()->json(
+                    [
+                        "status" => "success",
+                        "cart_total" => $total,
+                        "discount" => $coupon["discount"]
+                    ]
+                );
+            } elseif ($coupon["discount_type"] === "percent") {
+                $discount = $subTotal - ($subTotal * $coupon["discount"] / 100);
+                $total = $subTotal - $discount;
+                return response()->json(
+                    [
+                        "status" => "success",
+                        "cart_total" => $total,
+                        "discount" => $discount
+                    ]
+                );
+            }
+        }
+        return response()->json([
+            "status" => "success",
+            "cart_total" => $subTotal,
+            "discount" => 0
         ]);
     }
 }

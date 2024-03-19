@@ -68,3 +68,5 @@ Route::get("cart-count", [CartController::class, "updateCartCount"])->name("cart
 Route::get("mini-cart-amount", [CartController::class, "miniCartAmount"])->name("mini-cart-amount");
 Route::get("cart-content", [CartController::class, "getCartContent"])->name("cart-content");
 Route::post("mini-cart-remove", [CartController::class, "miniCartRemove"])->name("mini-cart-remove");
+Route::post("apply-coupon", [CartController::class, "applyCoupon"])->name("apply-coupon");
+Route::get("coupon-calculate", [CartController::class, "couponCalculate"])->name("coupon-calculate");

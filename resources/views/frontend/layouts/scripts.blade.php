@@ -195,6 +195,7 @@
                             .product_total
                         $(productId).text(totalAmount);
                         fetchAmountInCartDetail();
+                        couponCalculate();
                         toastr.success(data.message);
                     } else if (data.status === "stock_out") {
                         toastr.error(data.message);
@@ -205,6 +206,7 @@
                 }
             });
         })
+
 
         $(".button-decrement").click(function() {
             let input = $(this).siblings(".input-qty-cart");
@@ -227,6 +229,7 @@
                             .product_total
                         $(productId).text(totalAmount);
                         fetchAmountInCartDetail();
+                        couponCalculate();
                         toastr.success(data.message);
                     } else if (data.status === "stock_out") {
                         toastr.error(data.message);
@@ -237,6 +240,52 @@
                 }
             });
         })
+
+        //apply coupon
+        $(".coupon_apply_discount").on("submit", function(e) {
+            e.preventDefault();
+            let formData = $(this).serialize();
+            $.ajax({
+                url: "{{ route('apply-coupon') }}",
+                method: "POST",
+                data: formData,
+                success: function(data) {
+                    if (data.status === "error") {
+                        toastr.error(data.message);
+                    } else if (data.status === "success") {
+                        couponCalculate();
+                        toastr.success(data.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log(status);
+                }
+            });
+        })
+
+        //calculate coupon
+        function couponCalculate() {
+            $.ajax({
+                url: "{{ route('coupon-calculate') }}",
+                method: "GET",
+                success: function(data) {
+                    console.log(data);
+                    $(".cart-discount").text(
+                        `
+                            {{ $settings->currency_icon }}${data.discount}
+                            `
+                    );
+                    $(".cart-total").text(
+                        `
+                            {{ $settings->currency_icon }}${data.cart_total}
+                            `
+                    );
+                },
+                error: function(xhr, status, error) {
+                    console.log(status);
+                }
+            });
+        }
 
         // clear cart
         $(".clear-cart").click(function(e) {

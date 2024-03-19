@@ -4,8 +4,8 @@
 @endsection
 @section('content')
     <!--============================
-                                                                                                                                                                                                                                                                BREADCRUMB START
-                                                                                                                                                                                                                                                            ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                    BREADCRUMB START
+                                                                                                                                                                                                                                                                                                                                                                ==============================-->
     <section id="wsus__breadcrumb">
         <div class="wsus_breadcrumb_overlay">
             <div class="container">
@@ -23,13 +23,13 @@
         </div>
     </section>
     <!--============================
-                                                                                                                                                                                                                                                                BREADCRUMB END
-                                                                                                                                                                                                                                                            ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                    BREADCRUMB END
+                                                                                                                                                                                                                                                                                                                                                                ==============================-->
 
 
     <!--============================
-                                                                                                                                                                                                                                                                CART VIEW PAGE START
-                                                                                                                                                                                                                                                            ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                    CART VIEW PAGE START
+                                                                                                                                                                                                                                                                                                                                                                ==============================-->
     <section id="wsus__cart_view">
         <div class="container">
             <div class="row">
@@ -118,18 +118,20 @@
                 <div class="col-xl-3">
                     <div class="wsus__cart_list_footer_button" id="sticky_sidebar">
                         <h6>total cart</h6>
-                        <p>subtotal: <span id="sub_total_cart">{{$settings->currency_icon . miniCartAmount()}}</span></p>
-                        <p>delivery: <span>$00.00</span></p>
-                        <p>discount: <span>$10.00</span></p>
-                        <p class="total"><span>total:</span> <span>$134.00</span></p>
+                        <p>subtotal: <span id="sub_total_cart">{{ $settings->currency_icon . miniCartAmount() }}</span></p>
+                        <p>discount: <span class="cart-discount">{{ $settings->currency_icon . getDiscount() }}</span>
+                        </p>
+                        <p class="total"><span>total:</span> <span
+                                class="cart-total">{{ $settings->currency_icon . getMainTotal() }}</span></p>
 
-                        <form>
-                            <input type="text" placeholder="Coupon Code">
+                        <form class="coupon_apply_discount">
+                            <input type="text" placeholder="Coupon Code" name="coupon_code"
+                                value="{{ session()->has('coupon') ? session()->get('coupon')['coupon_code'] : '' }}">
                             <button type="submit" class="common_btn">apply</button>
                         </form>
                         <a class="common_btn mt-4 w-100 text-center" href="check_out.html">checkout</a>
-                        <a class="common_btn mt-1 w-100 text-center" href="product_grid_view.html"><i
-                                class="fab fa-shopify"></i> go shop</a>
+                        <a class="common_btn mt-1 w-100 text-center" href="{{ url('/') }}"><i
+                                class="fab fa-shopify"></i> Keep Shopping</a>
                     </div>
                 </div>
             </div>
@@ -166,8 +168,8 @@
         </div>
     </section>
     <!--============================
-                                                                                                                                                                                                                                                                  CART VIEW PAGE END
-                                                                                                                                                                                                                                                            ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                      CART VIEW PAGE END
+                                                                                                                                                                                                                                                                                                                                                                ==============================-->
 @endsection
 
 @push('scripts')
@@ -178,7 +180,6 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
         })
     </script>
 @endpush
