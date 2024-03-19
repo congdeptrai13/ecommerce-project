@@ -106,7 +106,11 @@ class ShippingRuleController extends Controller
         //
         $shipping = ShippingRule::findOrFail($id);
         $shipping->delete();
+        toastr('Update Shipping rule successfully', 'success', 'Success');
 
-        return response(['message' => 'deleted Shipping rule successfully']);
+        return response([
+            'status' => 'success',
+            'message' => 'deleted Shipping rule successfully'
+        ]);
     }
 }

@@ -4,8 +4,8 @@
 @endsection
 @section('content')
     <!--============================
-                                                                                                                                                                                                                                                                                                                                                                    BREADCRUMB START
-                                                                                                                                                                                                                                                                                                                                                                ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                                    BREADCRUMB START
+                                                                                                                                                                                                                                                                                                                                                                                ==============================-->
     <section id="wsus__breadcrumb">
         <div class="wsus_breadcrumb_overlay">
             <div class="container">
@@ -23,13 +23,13 @@
         </div>
     </section>
     <!--============================
-                                                                                                                                                                                                                                                                                                                                                                    BREADCRUMB END
-                                                                                                                                                                                                                                                                                                                                                                ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                                    BREADCRUMB END
+                                                                                                                                                                                                                                                                                                                                                                                ==============================-->
 
 
     <!--============================
-                                                                                                                                                                                                                                                                                                                                                                    CART VIEW PAGE START
-                                                                                                                                                                                                                                                                                                                                                                ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                                    CART VIEW PAGE START
+                                                                                                                                                                                                                                                                                                                                                                                ==============================-->
     <section id="wsus__cart_view">
         <div class="container">
             <div class="row">
@@ -129,7 +129,7 @@
                                 value="{{ session()->has('coupon') ? session()->get('coupon')['coupon_code'] : '' }}">
                             <button type="submit" class="common_btn">apply</button>
                         </form>
-                        <a class="common_btn mt-4 w-100 text-center" href="check_out.html">checkout</a>
+                        <a class="common_btn mt-4 w-100 text-center" href="{{ route('user.check-out') }}">checkout</a>
                         <a class="common_btn mt-1 w-100 text-center" href="{{ url('/') }}"><i
                                 class="fab fa-shopify"></i> Keep Shopping</a>
                     </div>
@@ -168,8 +168,8 @@
         </div>
     </section>
     <!--============================
-                                                                                                                                                                                                                                                                                                                                                                      CART VIEW PAGE END
-                                                                                                                                                                                                                                                                                                                                                                ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                                      CART VIEW PAGE END
+                                                                                                                                                                                                                                                                                                                                                                                ==============================-->
 @endsection
 
 @push('scripts')
