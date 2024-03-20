@@ -4,8 +4,8 @@
 @endsection
 @section('content')
     <!--============================
-                                                                                                                                                                                                                                                                                            BREADCRUMB START
-                                                                                                                                                                                                                                                                                        ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                                                                        BREADCRUMB START
+                                                                                                                                                                                                                                                                                                                                                                                                                    ==============================-->
     <section id="wsus__breadcrumb">
         <div class="wsus_breadcrumb_overlay">
             <div class="container">
@@ -23,99 +23,99 @@
         </div>
     </section>
     <!--============================
-                                                                                                                                                                                                                                                                                            BREADCRUMB END
-                                                                                                                                                                                                                                                                                        ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                                                                        BREADCRUMB END
+                                                                                                                                                                                                                                                                                                                                                                                                                    ==============================-->
 
 
     <!--============================
-                                                                                                                                                                                                                                                                                            CHECK OUT PAGE START
-                                                                                                                                                                                                                                                                                        ==============================-->
+                                                                                                                                                                                                                                                                                                                                                                                                                        CHECK OUT PAGE START
+                                                                                                                                                                                                                                                                                                                                                                                                                    ==============================-->
     <section id="wsus__cart_view">
         <div class="container">
-            <form class="wsus__checkout_form">
-                <div class="row">
-                    <div class="col-xl-8 col-lg-7">
-                        <div class="wsus__check_form">
-                            <h5>Billing Details <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">add
-                                    new address</a></h5>
-                            <div class="row">
-                                @foreach ($address as $item)
-                                    <div class="col-xl-6">
-                                        <div class="wsus__checkout_single_address">
-                                            <div class="form-check">
-                                                <input class="form-check-input shipping_address"
-                                                    data-id="{{ $item->id }}" type="radio" name="flexRadioDefault"
-                                                    id="flexRadioDefault1">
-                                                <label class="form-check-label" for="flexRadioDefault1">
-                                                    Select Address
-                                                </label>
-                                            </div>
-                                            <ul>
-                                                <li><span>Name :</span> {{ $item->name }}</li>
-                                                <li><span>Phone :</span> {{ $item->phone }}</li>
-                                                <li><span>Email :</span> {{ $item->email }}</li>
-                                                <li><span>Country :</span> {{ $item->country }}</li>
-                                                <li><span>City :</span> {{ $item->city }}</li>
-                                                <li><span>Zip Code :</span> {{ $item->zip_code }}</li>
-                                                <li><span>Address :</span> {{ $item->address }}</li>
-                                            </ul>
+            <div class="row">
+                <div class="col-xl-8 col-lg-7">
+                    <div class="wsus__check_form">
+                        <h5>Billing Details <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">add
+                                new address</a></h5>
+                        <div class="row">
+                            @foreach ($address as $item)
+                                <div class="col-xl-6">
+                                    <div class="wsus__checkout_single_address">
+                                        <div class="form-check">
+                                            <input class="form-check-input shipping_address" data-id="{{ $item->id }}"
+                                                type="radio" name="flexRadioDefault"
+                                                id="flexRadioDefault1{{ $item->id }}">
+                                            <label class="form-check-label" for="flexRadioDefault1{{ $item->id }}">
+                                                Select Address
+                                            </label>
                                         </div>
+                                        <ul>
+                                            <li><span>Name :</span> {{ $item->name }}</li>
+                                            <li><span>Phone :</span> {{ $item->phone }}</li>
+                                            <li><span>Email :</span> {{ $item->email }}</li>
+                                            <li><span>Country :</span> {{ $item->country }}</li>
+                                            <li><span>City :</span> {{ $item->city }}</li>
+                                            <li><span>Zip Code :</span> {{ $item->zip_code }}</li>
+                                            <li><span>Address :</span> {{ $item->address }}</li>
+                                        </ul>
                                     </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-5">
-                        <div class="wsus__order_details" id="sticky_sidebar">
-                            <p class="wsus__product">shipping Methods</p>
-                            @foreach ($shippingRule as $method)
-                                @if ($method->type === 'min_cost' && getMainTotal() >= $method->min_cost)
-                                    <div class="form-check">
-                                        <input class="form-check-input shipping_method" type="radio" name="exampleRadios"
-                                            id="exampleRadios1" value="{{ $method->id }}" data-id="{{ $method->cost }}">
-                                        <label class="form-check-label " for="exampleRadios1">
-                                            {{ $method->name }}
-                                            <span>cost: {{ $settings->currency_icon . $method->cost }}</span>
-                                        </label>
-                                    </div>
-                                @elseif($method->type === 'flat_cost')
-                                    <div class="form-check">
-                                        <input class="form-check-input shipping_method" type="radio" name="exampleRadios"
-                                            id="exampleRadios1" value="{{ $method->id }}" data-id="{{ $method->cost }}">
-                                        <label class="form-check-label" for="exampleRadios1">
-                                            {{ $method->name }}
-                                            <span>cost: {{ $settings->currency_icon . $method->cost }}</span>
-                                        </label>
-                                    </div>
-                                @endif
-                            @endforeach
-
-                            <div class="wsus__order_details_summery">
-                                <p>subtotal: <span>{{ $settings->currency_icon . miniCartAmount() }}</span></p>
-                                <p>shipping fee: <span id="shipping_fee">{{ $settings->currency_icon . 0 }}</span></p>
-                                <p>coupon(-): <span>{{ $settings->currency_icon . getDiscount() }}</span></p>
-                                <p><b>total:</b> <span><b id="main_total_amount"
-                                            data-id="{{ getMainTotal() }}">{{ $settings->currency_icon . getMainTotal() }}</b></span>
-                                </p>
-                            </div>
-                            <div class="terms_area">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked3"
-                                        checked>
-                                    <label class="form-check-label" for="flexCheckChecked3">
-                                        I have read and agree to the website <a href="#">terms and conditions *</a>
-                                    </label>
                                 </div>
-                            </div>
-                            <form action="" id="check">
-                                <input type="hidden" name="shipping_method_id" value="" id="shipping_method_id">
-                                <input type="hidden" name="shipping_address_id" value="" id="shipping_address_id">
-                            </form>
-                            <a href="payment.html" class="common_btn">Place Order</a>
+                            @endforeach
                         </div>
                     </div>
                 </div>
-            </form>
+                <div class="col-xl-4 col-lg-5">
+                    <div class="wsus__order_details" id="sticky_sidebar">
+                        <p class="wsus__product">shipping Methods</p>
+                        @foreach ($shippingRule as $method)
+                            @if ($method->type === 'min_cost' && getMainTotal() >= $method->min_cost)
+                                <div class="form-check">
+                                    <input class="form-check-input shipping_method" type="radio" name="exampleRadios"
+                                        id="exampleRadios1{{ $method->id }}" value="{{ $method->id }}"
+                                        data-id="{{ $method->cost }}">
+                                    <label class="form-check-label " for="exampleRadios1{{ $method->id }}">
+                                        {{ $method->name }}
+                                        <span>cost: {{ $settings->currency_icon . $method->cost }}</span>
+                                    </label>
+                                </div>
+                            @elseif($method->type === 'flat_cost')
+                                <div class="form-check">
+                                    <input class="form-check-input shipping_method" type="radio" name="exampleRadios"
+                                        id="exampleRadios{{ $method->id }}" value="{{ $method->id }}"
+                                        data-id="{{ $method->cost }}">
+                                    <label class="form-check-label" for="exampleRadios{{ $method->id }}">
+                                        {{ $method->name }}
+                                        <span>cost: {{ $settings->currency_icon . $method->cost }}</span>
+                                    </label>
+                                </div>
+                            @endif
+                        @endforeach
+
+                        <div class="wsus__order_details_summery">
+                            <p>subtotal: <span>{{ $settings->currency_icon . miniCartAmount() }}</span></p>
+                            <p>shipping fee: <span id="shipping_fee">{{ $settings->currency_icon . 0 }}</span></p>
+                            <p>coupon(-): <span>{{ $settings->currency_icon . getDiscount() }}</span></p>
+                            <p><b>total:</b> <span><b id="main_total_amount"
+                                        data-id="{{ getMainTotal() }}">{{ $settings->currency_icon . getMainTotal() }}</b></span>
+                            </p>
+                        </div>
+                        <div class="terms_area">
+                            <div class="form-check">
+                                <input class="form-check-input agreement-checkout" type="checkbox" value=""
+                                    id="flexCheckChecked3">
+                                <label class="form-check-label" for="flexCheckChecked3">
+                                    I have read and agree to the website <a href="#">terms and conditions *</a>
+                                </label>
+                            </div>
+                        </div>
+                        <form action="" id="checkoutFormSubmit">
+                            <input type="hidden" name="shipping_method_id" value="" id="shipping_method_id">
+                            <input type="hidden" name="shipping_address_id" value="" id="shipping_address_id">
+                        </form>
+                        <a href="#" id="submitCheckoutForm" class="common_btn">Place Order</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -202,9 +202,7 @@
             </div>
         </div>
     </div>
-    <!--============================
-                                                                                                                                                                                                                                                                                            CHECK OUT PAGE END
-                                                                                                                                                                                                                                                                                        ==============================-->
+    <!--============================              CHECK PAGE END   ==============================-->
 @endsection
 @push('scripts')
     <script>
@@ -223,6 +221,37 @@
             $(".shipping_address").on("click", function() {
                 $("#shipping_address_id").val($(this).data("id"));
             })
+        })
+
+        $("#submitCheckoutForm").on("click", function(e) {
+            e.preventDefault();
+            if ($("#shipping_method_id").val() === "") {
+                toastr.error("method shipping is required");
+            } else if ($("#shipping_address_id").val() === "") {
+                toastr.error("method address is required");
+            } else if (!$(".agreement-checkout").prop("checked")) {
+                toastr.error("you have to agree website terms and conditions");
+            } else {
+                $.ajax({
+                    url: "{{ route('user.checkout.form-submit') }}",
+                    method: "POST",
+                    data: $('#checkoutFormSubmit').serialize(),
+                    beforeSend: function() {
+                        $("#submitCheckoutForm").html("<i class='fas fa-spinner fa-spin fa-1x'></i>")
+                    },
+                    success: function(data) {
+                        if (data.status === "success") {
+                            $("#submitCheckoutForm").html("Place Order")
+                            window.location.href = data.redirect_url
+                        }
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(status);
+                    }
+                })
+            }
+
         })
     </script>
 @endpush
