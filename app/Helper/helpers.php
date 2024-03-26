@@ -83,3 +83,17 @@ function getDiscount()
     }
     return 0;
 }
+
+function getShippingFee()
+{
+    $shipping_method = Session::get("shipping_method");
+    if ($shipping_method) {
+        return $shipping_method["cost"];
+    }
+    return 0;
+}
+
+function getFinalTotalAmount()
+{
+    return getMainTotal() + getShippingFee();
+}
