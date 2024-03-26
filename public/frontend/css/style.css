@@ -9540,6 +9540,12 @@ a:not([href]):not([class]):hover {
     border-radius: 50%;
 }
 
-.input-qty-cart{
+.input-qty-cart {
     width: 20%;
+}
+
+
+
+div#card-element {
+    padding: 15px 10px;
 }

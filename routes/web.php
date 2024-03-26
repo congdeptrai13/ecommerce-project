@@ -64,6 +64,14 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
     Route::get("paypal/payment", [PaymentController::class, "payWithPaypal"])->name("paypal.payment");
     Route::get("paypal/success", [PaymentController::class, "paypalSuccess"])->name("paypal.success");
     Route::get("paypal/cancel", [PaymentController::class, "paypalCancel"])->name("paypal.cancel");
+
+    //route stripe
+    Route::post("stripe/payment", [PaymentController::class, "payWithStripe"])->name("stripe.payment");
+
+    // razorpay routes
+    Route::post("razorpay/payment", [PaymentController::class, "payWithRazorpay"])->name("razorpay.payment");
+
+
 });
 
 
@@ -85,5 +93,7 @@ Route::get("cart-content", [CartController::class, "getCartContent"])->name("car
 Route::post("mini-cart-remove", [CartController::class, "miniCartRemove"])->name("mini-cart-remove");
 Route::post("apply-coupon", [CartController::class, "applyCoupon"])->name("apply-coupon");
 Route::get("coupon-calculate", [CartController::class, "couponCalculate"])->name("coupon-calculate");
+
+
 
 
