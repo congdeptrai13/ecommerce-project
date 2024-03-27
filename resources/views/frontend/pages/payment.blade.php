@@ -4,8 +4,8 @@
 @endsection
 @section('content')
     <!--============================
-                                                                                                                    BREADCRUMB START
-                                                                                                                ==============================-->
+                                                                                                                        BREADCRUMB START
+                                                                                                                    ==============================-->
     <section id="wsus__breadcrumb">
         <div class="wsus_breadcrumb_overlay">
             <div class="container">
@@ -23,13 +23,13 @@
         </div>
     </section>
     <!--============================
-                                                                                                                    BREADCRUMB END
-                                                                                                                ==============================-->
+                                                                                                                        BREADCRUMB END
+                                                                                                                    ==============================-->
 
 
     <!--============================
-                                                                                                                    PAYMENT PAGE START
-                                                                                                                ==============================-->
+                                                                                                                        PAYMENT PAGE START
+                                                                                                                    ==============================-->
     <section id="wsus__cart_view">
         <div class="container">
             <div class="wsus__pay_info_area">
@@ -47,29 +47,17 @@
                                 <button class="nav-link common_btn" id="v-pills-profile-tab" data-bs-toggle="pill"
                                     data-bs-target="#v-pills-stripe" type="button" role="tab"
                                     aria-controls="v-pills-stripe" aria-selected="false">Stripe</button>
-                                <button class="nav-link common_btn" id="v-pills-razorpay-tab" data-bs-toggle="pill"
+                                {{-- <button class="nav-link common_btn" id="v-pills-razorpay-tab" data-bs-toggle="pill"
                                     data-bs-target="#v-pills-razorpay" type="button" role="tab"
-                                    aria-controls="v-pills-razorpay" aria-selected="false">RazorPay</button>
+                                    aria-controls="v-pills-razorpay" aria-selected="false">RazorPay</button> --}}
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-5 col-lg-5">
                         <div class="tab-content" id="v-pills-tabContent" id="sticky_sidebar">
-                            <div class="tab-pane fade show active" id="v-pills-paypal" role="tabpanel"
-                                aria-labelledby="v-pills-home-tab">
-                                <div class="row">
-                                    <div class="col-xl-12 m-auto">
-                                        <div class="wsus__payment_area">
-                                            <form>
-                                                <a type="submit" href="{{ route('user.paypal.payment') }}"
-                                                    class="nav-link common_btn text-center">Pay With Paypal</a>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @include('frontend.pages.payment-gateway.paypal')
                             @include('frontend.pages.payment-gateway.stripe')
-                            @include('frontend.pages.payment-gateway.razorpay')
+                            {{-- @include('frontend.pages.payment-gateway.razorpay') --}}
 
                         </div>
                     </div>
@@ -87,8 +75,8 @@
         </div>
     </section>
     <!--============================
-                                                                                                                    PAYMENT PAGE END
-                                                                                                                ==============================-->
+                                                                                                                        PAYMENT PAGE END
+                                                                                                                    ==============================-->
 @endsection
 
 
